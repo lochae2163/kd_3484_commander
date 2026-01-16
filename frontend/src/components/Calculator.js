@@ -91,7 +91,8 @@ function Calculator() {
         }
       } catch (err) {
         console.error('Error loading data:', err);
-        setError('Failed to load reference data. Make sure the backend is running.');
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+        setError(`Failed to load data from API (${apiUrl}). ${err.message}`);
       } finally {
         setDataLoading(false);
       }
@@ -166,12 +167,20 @@ function Calculator() {
       <div className="calculator loading-state">
         <div className="loading-spinner"></div>
         <p>Loading data...</p>
+        <p className="text-muted" style={{fontSize: '0.8rem', marginTop: '1rem'}}>
+          API: {process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}
+        </p>
       </div>
     );
   }
 
   return (
     <div className="calculator">
+      {error && (
+        <div className="error-message" style={{margin: '1rem 2rem'}}>
+          {error}
+        </div>
+      )}
       <div className="calculator-grid">
         {/* Left Column - Form */}
         <div className="form-section">
