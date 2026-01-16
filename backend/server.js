@@ -37,9 +37,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/calculator', calculatorRoutes);
 app.use('/api/data', dataRoutes);
 
-// Health check
+// Health check endpoint
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK', message: 'ROK Commander Calculator API is running' });
+  res.status(200).json({ status: 'OK', message: 'ROK Commander Calculator API is running', version: '1.1' });
 });
 
 // Seed database endpoint (one-time use)
