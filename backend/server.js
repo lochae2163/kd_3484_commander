@@ -119,6 +119,82 @@ app.get('/api/seed', async (req, res) => {
   }
 });
 
+// Force reseed endpoint (clears and re-seeds database)
+app.get('/api/reseed', async (req, res) => {
+  try {
+    const DATA_DIR = path.join(__dirname, 'data');
+
+    // Check if data files exist
+    if (!fs.existsSync(path.join(DATA_DIR, 'commanderRoles.json'))) {
+      return res.status(400).json({ error: 'Data files not found' });
+    }
+
+    console.log('Clearing database...');
+
+    // Clear all collections
+    await CommanderRole.deleteMany({});
+    await Equipment.deleteMany({});
+    await Inscription.deleteMany({});
+    await SetBonus.deleteMany({});
+    await VIPBonus.deleteMany({});
+    await Civilisation.deleteMany({});
+    await SpendingTier.deleteMany({});
+    await CitySkin.deleteMany({});
+
+    console.log('Re-seeding database...');
+
+    // Seed Commander Roles
+    const rolesData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'commanderRoles.json'), 'utf8'));
+    await CommanderRole.insertMany(rolesData);
+
+    // Seed Equipment
+    const equipmentData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'equipment.json'), 'utf8'));
+    await Equipment.insertMany(equipmentData);
+
+    // Seed Inscriptions
+    const inscriptionsData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'inscriptions.json'), 'utf8'));
+    await Inscription.insertMany(inscriptionsData);
+
+    // Seed Set Bonuses
+    const setBonusesData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'setBonuses.json'), 'utf8'));
+    await SetBonus.insertMany(setBonusesData);
+
+    // Seed VIP Bonuses
+    const vipData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'vipBonuses.json'), 'utf8'));
+    await VIPBonus.insertMany(vipData);
+
+    // Seed Civilisations
+    const civsData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'civilisations.json'), 'utf8'));
+    await Civilisation.insertMany(civsData);
+
+    // Seed Spending Tiers
+    const spendingData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'spendingTiers.json'), 'utf8'));
+    await SpendingTier.insertMany(spendingData);
+
+    // Seed City Skins
+    const citySkinsData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'citySkins.json'), 'utf8'));
+    await CitySkin.insertMany(citySkinsData);
+
+    res.status(200).json({
+      success: true,
+      message: 'Database re-seeded successfully!',
+      counts: {
+        roles: rolesData.length,
+        equipment: equipmentData.length,
+        inscriptions: inscriptionsData.length,
+        setBonuses: setBonusesData.length,
+        vipBonuses: vipData.length,
+        civilisations: civsData.length,
+        spendingTiers: spendingData.length,
+        citySkins: citySkinsData.length
+      }
+    });
+  } catch (error) {
+    console.error('Reseed error:', error);
+    res.status(500).json({ error: 'Failed to reseed database', details: error.message });
+  }
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
