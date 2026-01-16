@@ -23,7 +23,7 @@ const iconicLevelSchema = new mongoose.Schema({
   level: {
     type: String,
     required: true,
-    enum: ['Iconic I', 'Iconic II', 'Iconic IV', 'Iconic V']
+    enum: ['Iconic I', 'Iconic II', 'Iconic III', 'Iconic IV', 'Iconic V']
   },
   stats: {
     type: statsSchema,
