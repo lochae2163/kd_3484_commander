@@ -96,7 +96,7 @@
     "equipment_id": "lance_of_hw",
     "name": "Lance of HW",
     "type": "WEAPON",
-    "set_name": null,
+    "set_name": "Hellish Wasteland",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -282,7 +282,7 @@
     "equipment_id": "db_bow",
     "name": "DB Bow",
     "type": "WEAPON",
-    "set_name": null,
+    "set_name": "Dragon's Breath",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -468,7 +468,7 @@
     "equipment_id": "shield_of_ee",
     "name": "Shield of EE",
     "type": "WEAPON",
-    "set_name": null,
+    "set_name": "Eternal Empire",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -561,7 +561,7 @@
     "equipment_id": "scepter_of_gg",
     "name": "Scepter of GG",
     "type": "WEAPON",
-    "set_name": null,
+    "set_name": "Garb of the Glorious Goddess",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -746,8 +746,8 @@
   {
     "equipment_id": "war_helm_of_hw",
     "name": "War Helm of HW",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "HELMET",
+    "set_name": "Hellish Wasteland",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -839,7 +839,7 @@
   {
     "equipment_id": "ancestral_mask_of_night",
     "name": "Ancestral Mask of Night",
-    "type": "WEAPON",
+    "type": "HELMET",
     "set_name": null,
     "iconic_levels": [
       {
@@ -932,8 +932,8 @@
   {
     "equipment_id": "db_helm",
     "name": "DB Helm",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "HELMET",
+    "set_name": "Dragon's Breath",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -1025,7 +1025,7 @@
   {
     "equipment_id": "helm_of_conqueror",
     "name": "Helm of Conqueror",
-    "type": "WEAPON",
+    "type": "HELMET",
     "set_name": null,
     "iconic_levels": [
       {
@@ -1118,8 +1118,8 @@
   {
     "equipment_id": "gold_helm_of_ee",
     "name": "Gold Helm of EE",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "HELMET",
+    "set_name": "Eternal Empire",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -1211,8 +1211,8 @@
   {
     "equipment_id": "diadem_of_gg",
     "name": "Diadem of GG",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "HELMET",
+    "set_name": "Garb of the Glorious Goddess",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -1304,8 +1304,8 @@
   {
     "equipment_id": "heavy_armor_of_hw",
     "name": "Heavy Armor of HW",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "CHEST",
+    "set_name": "Hellish Wasteland",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -1397,8 +1397,8 @@
   {
     "equipment_id": "db_plate",
     "name": "DB plate",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "CHEST",
+    "set_name": "Dragon's Breath",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -1490,7 +1490,7 @@
   {
     "equipment_id": "milky_way",
     "name": "Milky Way",
-    "type": "WEAPON",
+    "type": "CHEST",
     "set_name": null,
     "iconic_levels": [
       {
@@ -1583,8 +1583,8 @@
   {
     "equipment_id": "plate_of_ee",
     "name": "Plate of EE",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "CHEST",
+    "set_name": "Eternal Empire",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -1676,7 +1676,7 @@
   {
     "equipment_id": "hope_cloak",
     "name": "Hope Cloak",
-    "type": "WEAPON",
+    "type": "CHEST",
     "set_name": null,
     "iconic_levels": [
       {
@@ -1769,8 +1769,8 @@
   {
     "equipment_id": "plate_of_gg",
     "name": "Plate of GG",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "CHEST",
+    "set_name": "Garb of the Glorious Goddess",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -1862,7 +1862,7 @@
   {
     "equipment_id": "navar_control",
     "name": "Navar Control",
-    "type": "WEAPON",
+    "type": "CHEST",
     "set_name": null,
     "iconic_levels": [
       {
@@ -1955,8 +1955,8 @@
   {
     "equipment_id": "armband_of_hw",
     "name": "Armband of HW",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "GLOVES",
+    "set_name": "Hellish Wasteland",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -2048,8 +2048,8 @@
   {
     "equipment_id": "db_vambraces",
     "name": "DB Vambraces",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "GLOVES",
+    "set_name": "Dragon's Breath",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -2141,7 +2141,7 @@
   {
     "equipment_id": "ians_choice",
     "name": "Ian's choice",
-    "type": "WEAPON",
+    "type": "GLOVES",
     "set_name": null,
     "iconic_levels": [
       {
@@ -2234,8 +2234,8 @@
   {
     "equipment_id": "vambraces_of_ee",
     "name": "Vambraces of EE",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "GLOVES",
+    "set_name": "Eternal Empire",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -2327,7 +2327,7 @@
   {
     "equipment_id": "sacred_grips",
     "name": "Sacred Grips",
-    "type": "WEAPON",
+    "type": "GLOVES",
     "set_name": null,
     "iconic_levels": [
       {
@@ -2420,8 +2420,8 @@
   {
     "equipment_id": "gauntlets_of_gg",
     "name": "Gauntlets of GG",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "GLOVES",
+    "set_name": "Garb of the Glorious Goddess",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -2513,7 +2513,7 @@
   {
     "equipment_id": "ash_of_the_dawn",
     "name": "Ash of the Dawn",
-    "type": "WEAPON",
+    "type": "LEGS",
     "set_name": null,
     "iconic_levels": [
       {
@@ -2606,8 +2606,8 @@
   {
     "equipment_id": "tassets_of_the_hw",
     "name": "Tassets of the HW",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "LEGS",
+    "set_name": "Hellish Wasteland",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -2699,8 +2699,8 @@
   {
     "equipment_id": "db_tassets",
     "name": "DB Tassets",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "LEGS",
+    "set_name": "Dragon's Breath",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -2792,7 +2792,7 @@
   {
     "equipment_id": "tassets_of_the_war_god",
     "name": "Tassets of the War God",
-    "type": "WEAPON",
+    "type": "LEGS",
     "set_name": null,
     "iconic_levels": [
       {
@@ -2885,8 +2885,8 @@
   {
     "equipment_id": "greaves_of_ee",
     "name": "Greaves of EE",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "LEGS",
+    "set_name": "Eternal Empire",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -2978,7 +2978,7 @@
   {
     "equipment_id": "eternal_night",
     "name": "Eternal Night",
-    "type": "WEAPON",
+    "type": "LEGS",
     "set_name": null,
     "iconic_levels": [
       {
@@ -3071,8 +3071,8 @@
   {
     "equipment_id": "chausses_of_gg",
     "name": "Chausses of GG",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "LEGS",
+    "set_name": "Garb of the Glorious Goddess",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -3164,8 +3164,8 @@
   {
     "equipment_id": "boots_of_hw",
     "name": "Boots of HW",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "BOOTS",
+    "set_name": "Hellish Wasteland",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -3257,8 +3257,8 @@
   {
     "equipment_id": "db_boots",
     "name": "DB Boots",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "BOOTS",
+    "set_name": "Dragon's Breath",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -3350,7 +3350,7 @@
   {
     "equipment_id": "commanders_boots",
     "name": "Commander's Boots",
-    "type": "WEAPON",
+    "type": "BOOTS",
     "set_name": null,
     "iconic_levels": [
       {
@@ -3443,8 +3443,8 @@
   {
     "equipment_id": "sturdy_boots_of_ee",
     "name": "Sturdy Boots of EE",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "BOOTS",
+    "set_name": "Eternal Empire",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -3536,7 +3536,7 @@
   {
     "equipment_id": "shios_return",
     "name": "Shio's Return",
-    "type": "WEAPON",
+    "type": "BOOTS",
     "set_name": null,
     "iconic_levels": [
       {
@@ -3629,8 +3629,8 @@
   {
     "equipment_id": "greaves_of_gg",
     "name": "Greaves of GG",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "LEGS",
+    "set_name": "Garb of the Glorious Goddess",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -3722,7 +3722,7 @@
   {
     "equipment_id": "ring",
     "name": "Ring",
-    "type": "WEAPON",
+    "type": "ACCESSORY",
     "set_name": null,
     "iconic_levels": [
       {
@@ -3815,7 +3815,7 @@
   {
     "equipment_id": "horn_rally",
     "name": "Horn (rally)",
-    "type": "WEAPON",
+    "type": "ACCESSORY",
     "set_name": null,
     "iconic_levels": [
       {
@@ -3908,7 +3908,7 @@
   {
     "equipment_id": "horn_garrison",
     "name": "Horn (garrison)",
-    "type": "WEAPON",
+    "type": "ACCESSORY",
     "set_name": null,
     "iconic_levels": [
       {
@@ -4001,8 +4001,8 @@
   {
     "equipment_id": "gg",
     "name": "GG",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "ACCESSORY",
+    "set_name": "Garb of the Glorious Goddess",
     "iconic_levels": [
       {
         "level": "Iconic I",
@@ -4094,7 +4094,7 @@
   {
     "equipment_id": "vengeance_",
     "name": "Vengeance ",
-    "type": "WEAPON",
+    "type": "ACCESSORY",
     "set_name": null,
     "iconic_levels": [
       {
@@ -4187,7 +4187,7 @@
   {
     "equipment_id": "heros_hilt",
     "name": "Hero's Hilt",
-    "type": "WEAPON",
+    "type": "ACCESSORY",
     "set_name": null,
     "iconic_levels": [
       {
@@ -4280,8 +4280,8 @@
   {
     "equipment_id": "dagger",
     "name": "Dagger",
-    "type": "WEAPON",
-    "set_name": null,
+    "type": "ACCESSORY",
+    "set_name": "Garb of the Glorious Goddess",
     "iconic_levels": [
       {
         "level": "Iconic I",

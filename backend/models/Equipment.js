@@ -48,7 +48,7 @@ const equipmentSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['WEAPON', 'HELM', 'CHEST', 'GLOVES', 'PANTS', 'BOOTS', 'ACCESSORY']
+    enum: ['WEAPON', 'HELMET', 'CHEST', 'GLOVES', 'LEGS', 'BOOTS', 'ACCESSORY']
   },
   set_name: {
     type: String,

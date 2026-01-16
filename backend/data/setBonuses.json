@@ -1,15 +1,17 @@
 [
   {
-    "set_name": "Hellish Wasteland",
+    "set_name": "Dragon's Breath",
+    "troop_focus": "Archer",
     "bonus_levels": [
       {
         "pieces_required": 2,
         "stats": {
-          "attack": 2,
+          "attack": 3,
           "defense": 0,
           "health": 0,
           "all_dmg": 0,
-          "skill_dmg": 0
+          "skill_dmg": 0,
+          "march_speed": 0
         }
       },
       {
@@ -19,83 +21,167 @@
           "defense": 0,
           "health": 0,
           "all_dmg": 0,
-          "skill_dmg": 2
+          "skill_dmg": 3,
+          "march_speed": 0
         }
       },
       {
         "pieces_required": 6,
-        "stats": {
-          "attack": 4,
-          "defense": 0,
-          "health": 3,
-          "all_dmg": 0,
-          "skill_dmg": 3
-        }
-      }
-    ]
-  },
-  {
-    "set_name": "Dragon Breath",
-    "bonus_levels": [
-      {
-        "pieces_required": 2,
-        "stats": {
-          "attack": 2,
-          "defense": 0,
-          "health": 0,
-          "all_dmg": 0,
-          "skill_dmg": 0
-        }
-      },
-      {
-        "pieces_required": 4,
         "stats": {
           "attack": 3,
           "defense": 0,
-          "health": 0,
+          "health": 5,
           "all_dmg": 0,
-          "skill_dmg": 3
-        }
-      },
-      {
-        "pieces_required": 6,
-        "stats": {
-          "attack": 4,
-          "defense": 0,
-          "health": 3,
-          "all_dmg": 0,
-          "skill_dmg": 4
+          "skill_dmg": 3,
+          "march_speed": 0,
+          "troop_specific": {
+            "archer_health": 5
+          }
         }
       }
     ]
   },
   {
     "set_name": "Eternal Empire",
+    "troop_focus": "Infantry",
     "bonus_levels": [
       {
         "pieces_required": 2,
         "stats": {
           "attack": 0,
-          "defense": 2,
+          "defense": 3,
           "health": 0,
           "all_dmg": 0,
-          "skill_dmg": 0
+          "skill_dmg": 0,
+          "march_speed": 0
+        }
+      },
+      {
+        "pieces_required": 4,
+        "stats": {
+          "attack": 0,
+          "defense": 3,
+          "health": 0,
+          "all_dmg": 0,
+          "skill_dmg": 0,
+          "march_speed": 10
+        }
+      },
+      {
+        "pieces_required": 6,
+        "stats": {
+          "attack": 5,
+          "defense": 3,
+          "health": 0,
+          "all_dmg": 0,
+          "skill_dmg": 0,
+          "march_speed": 10,
+          "troop_specific": {
+            "infantry_attack": 5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "set_name": "Hellish Wasteland",
+    "troop_focus": "Cavalry",
+    "bonus_levels": [
+      {
+        "pieces_required": 2,
+        "stats": {
+          "attack": 0,
+          "defense": 0,
+          "health": 3,
+          "all_dmg": 0,
+          "skill_dmg": 0,
+          "counterattack_dmg": 0
+        }
+      },
+      {
+        "pieces_required": 4,
+        "stats": {
+          "attack": 0,
+          "defense": 0,
+          "health": 3,
+          "all_dmg": 0,
+          "skill_dmg": 0,
+          "counterattack_dmg": 3
         }
       },
       {
         "pieces_required": 6,
         "stats": {
           "attack": 0,
-          "defense": 4,
+          "defense": 5,
           "health": 3,
           "all_dmg": 0,
-          "skill_dmg": 3
+          "skill_dmg": 0,
+          "counterattack_dmg": 3,
+          "troop_specific": {
+            "cavalry_defense": 5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "set_name": "Revival",
+    "troop_focus": "Archer/Mixed",
+    "bonus_levels": [
+      {
+        "pieces_required": 2,
+        "stats": {
+          "attack": 3,
+          "defense": 0,
+          "health": 0,
+          "all_dmg": 0,
+          "skill_dmg": 0
+        }
+      },
+      {
+        "pieces_required": 4,
+        "stats": {
+          "attack": 3,
+          "defense": 3,
+          "health": 0,
+          "all_dmg": 0,
+          "skill_dmg": 0
+        }
+      }
+    ]
+  },
+  {
+    "set_name": "Windswept",
+    "troop_focus": "Cavalry (Epic)",
+    "bonus_levels": [
+      {
+        "pieces_required": 2,
+        "stats": {
+          "attack": 2,
+          "defense": 0,
+          "health": 0,
+          "all_dmg": 0,
+          "skill_dmg": 0,
+          "march_speed": 0
+        }
+      },
+      {
+        "pieces_required": 4,
+        "stats": {
+          "attack": 2,
+          "defense": 0,
+          "health": 0,
+          "all_dmg": 0,
+          "skill_dmg": 0,
+          "march_speed": 4
         }
       }
     ]
   },
   {
     "set_name": "Garb of the Glorious Goddess",
+    "troop_focus": "Mixed",
     "bonus_levels": [
       {
         "pieces_required": 2,

@@ -19,6 +19,7 @@ export const dataService = {
   getSpendingTiers: () => api.get('/data/spending'),
   getCitySkins: () => api.get('/data/cityskins'),
   getSetBonuses: () => api.get('/data/setbonuses'),
+  getFormations: () => api.get('/data/formations'),
 };
 
 // Calculator endpoints

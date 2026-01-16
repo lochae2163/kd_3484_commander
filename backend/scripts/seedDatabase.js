@@ -7,6 +7,7 @@ import CommanderRole from '../models/CommanderRole.js';
 import Equipment from '../models/Equipment.js';
 import Inscription from '../models/Inscription.js';
 import SetBonus from '../models/SetBonus.js';
+import Formation from '../models/Formation.js';
 import { VIPBonus, Civilisation, SpendingTier, CitySkin } from '../models/PlayerProfile.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,6 +28,7 @@ async function seedDatabase() {
     await Equipment.deleteMany({});
     await Inscription.deleteMany({});
     await SetBonus.deleteMany({});
+    await Formation.deleteMany({});
     await VIPBonus.deleteMany({});
     await Civilisation.deleteMany({});
     await SpendingTier.deleteMany({});
@@ -56,6 +58,12 @@ async function seedDatabase() {
     const setBonusesData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'setBonuses.json'), 'utf8'));
     await SetBonus.insertMany(setBonusesData);
     console.log(`✅ Seeded ${setBonusesData.length} set bonuses\n`);
+
+    // Seed Formations
+    console.log('⚔️  Seeding Formations...');
+    const formationsData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'formations.json'), 'utf8'));
+    await Formation.insertMany(formationsData);
+    console.log(`✅ Seeded ${formationsData.length} formations\n`);
 
     // Seed VIP Bonuses
     console.log('👑 Seeding VIP Bonuses...');

@@ -11,6 +11,7 @@ import CommanderRole from './models/CommanderRole.js';
 import Equipment from './models/Equipment.js';
 import Inscription from './models/Inscription.js';
 import SetBonus from './models/SetBonus.js';
+import Formation from './models/Formation.js';
 import { VIPBonus, Civilisation, SpendingTier, CitySkin } from './models/PlayerProfile.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -76,6 +77,10 @@ app.get('/api/seed', async (req, res) => {
     const setBonusesData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'setBonuses.json'), 'utf8'));
     await SetBonus.insertMany(setBonusesData);
 
+    // Seed Formations
+    const formationsData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'formations.json'), 'utf8'));
+    await Formation.insertMany(formationsData);
+
     // Seed VIP Bonuses
     const vipData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'vipBonuses.json'), 'utf8'));
     await VIPBonus.insertMany(vipData);
@@ -100,6 +105,7 @@ app.get('/api/seed', async (req, res) => {
         equipment: equipmentData.length,
         inscriptions: inscriptionsData.length,
         setBonuses: setBonusesData.length,
+        formations: formationsData.length,
         vipBonuses: vipData.length,
         civilisations: civsData.length,
         spendingTiers: spendingData.length,
@@ -129,6 +135,7 @@ app.get('/api/reseed', async (req, res) => {
     await Equipment.deleteMany({});
     await Inscription.deleteMany({});
     await SetBonus.deleteMany({});
+    await Formation.deleteMany({});
     await VIPBonus.deleteMany({});
     await Civilisation.deleteMany({});
     await SpendingTier.deleteMany({});
@@ -151,6 +158,10 @@ app.get('/api/reseed', async (req, res) => {
     // Seed Set Bonuses
     const setBonusesData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'setBonuses.json'), 'utf8'));
     await SetBonus.insertMany(setBonusesData);
+
+    // Seed Formations
+    const formationsData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'formations.json'), 'utf8'));
+    await Formation.insertMany(formationsData);
 
     // Seed VIP Bonuses
     const vipData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'vipBonuses.json'), 'utf8'));
@@ -176,6 +187,7 @@ app.get('/api/reseed', async (req, res) => {
         equipment: equipmentData.length,
         inscriptions: inscriptionsData.length,
         setBonuses: setBonusesData.length,
+        formations: formationsData.length,
         vipBonuses: vipData.length,
         civilisations: civsData.length,
         spendingTiers: spendingData.length,

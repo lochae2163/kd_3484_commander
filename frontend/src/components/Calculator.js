@@ -16,13 +16,12 @@ function Calculator() {
   const [formation, setFormation] = useState('WEDGE');
   const [equipment, setEquipment] = useState({
     WEAPON: { equipment_id: '', iconic_level: 'V', special_talent: true },
-    HELM: { equipment_id: '', iconic_level: 'V', special_talent: true },
+    HELMET: { equipment_id: '', iconic_level: 'V', special_talent: true },
     CHEST: { equipment_id: '', iconic_level: 'V', special_talent: true },
     GLOVES: { equipment_id: '', iconic_level: 'V', special_talent: true },
-    PANTS: { equipment_id: '', iconic_level: 'V', special_talent: true },
+    LEGS: { equipment_id: '', iconic_level: 'V', special_talent: true },
     BOOTS: { equipment_id: '', iconic_level: 'V', special_talent: true },
-    ACCESSORY1: { equipment_id: '', iconic_level: 'V', special_talent: true },
-    ACCESSORY2: { equipment_id: '', iconic_level: 'V', special_talent: true },
+    ACCESSORY: { equipment_id: '', iconic_level: 'V', special_talent: true },
   });
   const [specialInscriptions, setSpecialInscriptions] = useState([]);
   const [rareInscriptions, setRareInscriptions] = useState([]);
@@ -41,6 +40,7 @@ function Calculator() {
   const [citySkins, setCitySkins] = useState([]);
   const [allEquipment, setAllEquipment] = useState([]);
   const [allInscriptions, setAllInscriptions] = useState([]);
+  const [allFormations, setAllFormations] = useState([]);
 
   // Result state
   const [result, setResult] = useState(null);
@@ -60,6 +60,7 @@ function Calculator() {
           skinsRes,
           equipRes,
           inscRes,
+          formationsRes,
         ] = await Promise.all([
           dataService.getRoles(),
           dataService.getCivilisations(),
@@ -67,6 +68,7 @@ function Calculator() {
           dataService.getCitySkins(),
           dataService.getEquipment(),
           dataService.getInscriptions(),
+          dataService.getFormations(),
         ]);
 
         setRoles(rolesRes.data.roles || []);
@@ -75,6 +77,7 @@ function Calculator() {
         setCitySkins(skinsRes.data.citySkins || []);
         setAllEquipment(equipRes.data.equipment || []);
         setAllInscriptions(inscRes.data.inscriptions || []);
+        setAllFormations(formationsRes.data.formations || []);
 
         // Set defaults
         if (rolesRes.data.roles?.length > 0) {
@@ -88,6 +91,9 @@ function Calculator() {
         }
         if (skinsRes.data.citySkins?.length > 0) {
           setCitySkin(skinsRes.data.citySkins[0].name);
+        }
+        if (formationsRes.data.formations?.length > 0) {
+          setFormation(formationsRes.data.formations[0].formation_id);
         }
       } catch (err) {
         console.error('Error loading data:', err);
@@ -271,11 +277,11 @@ function Calculator() {
             <div className="form-group">
               <label>Formation</label>
               <select value={formation} onChange={(e) => setFormation(e.target.value)}>
-                <option value="ARCH">ARCH</option>
-                <option value="WEDGE">WEDGE</option>
-                <option value="HOLLOW SQUARE">HOLLOW SQUARE</option>
-                <option value="DELTA">DELTA</option>
-                <option value="PINCER">PINCER</option>
+                {allFormations.map(f => (
+                  <option key={f.formation_id} value={f.formation_id}>
+                    {f.name} - {f.combat_effect}
+                  </option>
+                ))}
               </select>
             </div>
 

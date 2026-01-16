@@ -7,7 +7,8 @@ import {
   getAllCivilisations,
   getAllSpendingTiers,
   getAllCitySkins,
-  getAllSetBonuses
+  getAllSetBonuses,
+  getAllFormations
 } from '../controllers/dataController.js';
 
 const router = express.Router();
@@ -35,5 +36,8 @@ router.get('/cityskins', getAllCitySkins);
 
 // Get all set bonuses
 router.get('/setbonuses', getAllSetBonuses);
+
+// Get all formations
+router.get('/formations', getAllFormations);
 
 export default router;

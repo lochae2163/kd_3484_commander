@@ -2,6 +2,7 @@ import CommanderRole from '../models/CommanderRole.js';
 import Equipment from '../models/Equipment.js';
 import Inscription from '../models/Inscription.js';
 import SetBonus from '../models/SetBonus.js';
+import Formation from '../models/Formation.js';
 import { VIPBonus, Civilisation, SpendingTier, CitySkin } from '../models/PlayerProfile.js';
 
 /**
@@ -111,5 +112,18 @@ export const getAllSetBonuses = async (req, res) => {
   } catch (error) {
     console.error('Error fetching set bonuses:', error);
     res.status(500).json({ error: 'Failed to fetch set bonuses' });
+  }
+};
+
+/**
+ * Get all formations
+ */
+export const getAllFormations = async (req, res) => {
+  try {
+    const formations = await Formation.find({}).sort({ name: 1 });
+    res.status(200).json({ success: true, count: formations.length, formations });
+  } catch (error) {
+    console.error('Error fetching formations:', error);
+    res.status(500).json({ error: 'Failed to fetch formations' });
   }
 };
