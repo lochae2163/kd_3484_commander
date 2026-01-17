@@ -210,25 +210,32 @@ export function calculateLayer3Score(layer3Data, role) {
  * @param {number} layer1Score
  * @param {number} layer2Score
  * @param {number} layer3Score
- * @param {Object} role - Commander role with reference scores
+ * @param {Object} role - Commander role with reference scores and tier thresholds
  * @returns {Object} { totalScore, tier, percentageOfMax }
  */
 export function calculateTotalScore(layer1Score, layer2Score, layer3Score, role) {
   const totalScore = layer1Score + layer2Score + layer3Score;
-  const highestScore = role.highest_score_reference;
-  const percentageOfMax = (totalScore / highestScore) * 100;
-
-  let tier = 'C';
   const thresholds = role.tier_thresholds;
 
-  if (percentageOfMax >= thresholds.s_plus) {
-    tier = 'S+';
-  } else if (percentageOfMax >= thresholds.s) {
-    tier = 'S';
-  } else if (percentageOfMax >= thresholds.a) {
-    tier = 'A';
-  } else if (percentageOfMax >= thresholds.b) {
-    tier = 'B';
+  // Calculate percentage of max (GOD tier threshold is the max)
+  const godThreshold = thresholds?.god || 500;
+  const percentageOfMax = (totalScore / godThreshold) * 100;
+
+  // Determine tier based on absolute score thresholds
+  let tier = 'C';
+
+  if (thresholds) {
+    if (totalScore >= thresholds.god) {
+      tier = 'ONLY GOD';
+    } else if (totalScore >= thresholds.s_plus) {
+      tier = 'S+';
+    } else if (totalScore >= thresholds.s) {
+      tier = 'S';
+    } else if (totalScore >= thresholds.a) {
+      tier = 'A';
+    } else if (totalScore >= thresholds.b) {
+      tier = 'B';
+    }
   }
 
   return {

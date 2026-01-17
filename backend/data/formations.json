@@ -2,16 +2,18 @@
   {
     "formation_id": "arch",
     "name": "Arch",
-    "combat_effect": "+5% Attack Damage",
+    "combat_effect": "+5% Normal Attack Damage",
     "best_use_case": "Garrison commanders (Dido)",
     "stats": {
-      "attack_dmg": 5,
+      "attack": 0,
+      "defense": 0,
+      "health": 0,
+      "all_dmg": 0,
+      "na": 5,
+      "ca": 0,
       "skill_dmg": 0,
-      "all_dmg_reduction": 0,
-      "combo_dmg": 0,
       "smite_dmg": 0,
-      "healing_received": 0,
-      "march_speed": 0
+      "combo_dmg": 0
     }
   },
   {
@@ -20,28 +22,32 @@
     "combat_effect": "+5% Skill Damage",
     "best_use_case": "Skill-focused rally (archers, cavalry)",
     "stats": {
-      "attack_dmg": 0,
+      "attack": 0,
+      "defense": 0,
+      "health": 0,
+      "all_dmg": 0,
+      "na": 0,
+      "ca": 0,
       "skill_dmg": 5,
-      "all_dmg_reduction": 0,
-      "combo_dmg": 0,
       "smite_dmg": 0,
-      "healing_received": 0,
-      "march_speed": 0
+      "combo_dmg": 0
     }
   },
   {
     "formation_id": "hollow_square",
     "name": "Hollow Square",
-    "combat_effect": "-2% All Damage Taken",
+    "combat_effect": "+2% All Damage",
     "best_use_case": "Defensive garrison",
     "stats": {
-      "attack_dmg": 0,
+      "attack": 0,
+      "defense": 0,
+      "health": 0,
+      "all_dmg": 2,
+      "na": 0,
+      "ca": 0,
       "skill_dmg": 0,
-      "all_dmg_reduction": 2,
-      "combo_dmg": 0,
       "smite_dmg": 0,
-      "healing_received": 0,
-      "march_speed": 0
+      "combo_dmg": 0
     }
   },
   {
@@ -50,13 +56,15 @@
     "combat_effect": "+10% Combo Attack Damage",
     "best_use_case": "Combo cavalry (Arthur, Subutai)",
     "stats": {
-      "attack_dmg": 0,
+      "attack": 0,
+      "defense": 0,
+      "health": 0,
+      "all_dmg": 0,
+      "na": 0,
+      "ca": 0,
       "skill_dmg": 0,
-      "all_dmg_reduction": 0,
-      "combo_dmg": 10,
       "smite_dmg": 0,
-      "healing_received": 0,
-      "march_speed": 0
+      "combo_dmg": 10
     }
   },
   {
@@ -65,123 +73,15 @@
     "combat_effect": "+10% Smite Damage",
     "best_use_case": "Smite infantry (William Wallace, Bai Qi)",
     "stats": {
-      "attack_dmg": 0,
+      "attack": 0,
+      "defense": 0,
+      "health": 0,
+      "all_dmg": 0,
+      "na": 0,
+      "ca": 0,
       "skill_dmg": 0,
-      "all_dmg_reduction": 0,
-      "combo_dmg": 0,
       "smite_dmg": 10,
-      "healing_received": 0,
-      "march_speed": 0
+      "combo_dmg": 0
     }
-  },
-  {
-    "formation_id": "tercio",
-    "name": "Tercio",
-    "combat_effect": "Armament bonuses apply to all unit types",
-    "best_use_case": "Mixed troop garrison",
-    "stats": {
-      "attack_dmg": 0,
-      "skill_dmg": 0,
-      "all_dmg_reduction": 0,
-      "combo_dmg": 0,
-      "smite_dmg": 0,
-      "healing_received": 0,
-      "march_speed": 0
-    },
-    "special_effect": "universal_armaments"
-  },
-  {
-    "formation_id": "testudo",
-    "name": "Testudo",
-    "combat_effect": "-5% damage when shielded, +2.5% Healing",
-    "best_use_case": "Shield-focused commanders",
-    "stats": {
-      "attack_dmg": 0,
-      "skill_dmg": 0,
-      "all_dmg_reduction": 5,
-      "combo_dmg": 0,
-      "smite_dmg": 0,
-      "healing_received": 2.5,
-      "march_speed": 0
-    },
-    "special_effect": "shield_damage_reduction"
-  },
-  {
-    "formation_id": "circle",
-    "name": "Circle",
-    "combat_effect": "+5% All Healing Received",
-    "best_use_case": "Sustain builds",
-    "stats": {
-      "attack_dmg": 0,
-      "skill_dmg": 0,
-      "all_dmg_reduction": 0,
-      "combo_dmg": 0,
-      "smite_dmg": 0,
-      "healing_received": 5,
-      "march_speed": 0
-    }
-  },
-  {
-    "formation_id": "triple_line",
-    "name": "Triple Line",
-    "combat_effect": "+5% March Speed",
-    "best_use_case": "Field fighting",
-    "stats": {
-      "attack_dmg": 0,
-      "skill_dmg": 0,
-      "all_dmg_reduction": 0,
-      "combo_dmg": 0,
-      "smite_dmg": 0,
-      "healing_received": 0,
-      "march_speed": 5
-    }
-  },
-  {
-    "formation_id": "staggered",
-    "name": "Staggered",
-    "combat_effect": "+15% March Speed toward rally/garrison",
-    "best_use_case": "Reinforcement",
-    "stats": {
-      "attack_dmg": 0,
-      "skill_dmg": 0,
-      "all_dmg_reduction": 0,
-      "combo_dmg": 0,
-      "smite_dmg": 0,
-      "healing_received": 0,
-      "march_speed": 15
-    },
-    "special_effect": "rally_garrison_speed"
-  },
-  {
-    "formation_id": "v_formation",
-    "name": "V Formation",
-    "combat_effect": "Ranged mode: 1 basic attack/second",
-    "best_use_case": "Specialized",
-    "stats": {
-      "attack_dmg": 0,
-      "skill_dmg": 0,
-      "all_dmg_reduction": 0,
-      "combo_dmg": 0,
-      "smite_dmg": 0,
-      "healing_received": 0,
-      "march_speed": 0
-    },
-    "special_effect": "ranged_attack_mode"
-  },
-  {
-    "formation_id": "echelon",
-    "name": "Echelon",
-    "combat_effect": "Percentage buffs to other troops x1.2",
-    "best_use_case": "Support commanders",
-    "stats": {
-      "attack_dmg": 0,
-      "skill_dmg": 0,
-      "all_dmg_reduction": 0,
-      "combo_dmg": 0,
-      "smite_dmg": 0,
-      "healing_received": 0,
-      "march_speed": 0
-    },
-    "special_effect": "buff_multiplier"
   }
 ]

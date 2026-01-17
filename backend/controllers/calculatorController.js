@@ -2,6 +2,7 @@ import CommanderRole from '../models/CommanderRole.js';
 import Equipment from '../models/Equipment.js';
 import Inscription from '../models/Inscription.js';
 import SetBonus from '../models/SetBonus.js';
+import Formation from '../models/Formation.js';
 import { VIPBonus, Civilisation, SpendingTier, CitySkin } from '../models/PlayerProfile.js';
 import CommanderBuild from '../models/CommanderBuild.js';
 import {
@@ -104,11 +105,8 @@ export const calculateBuildScore = async (req, res) => {
 
     // === LAYER 3: Formation & Inscriptions ===
 
-    // Get formation bonus (inscriptions table includes formations)
-    const formationData = await Inscription.findOne({
-      name: formation,
-      rarity: 'FORMATION'
-    });
+    // Get formation bonus from Formation model
+    const formationData = await Formation.findOne({ formation_id: formation });
 
     // Get all inscription details
     const allInscriptionIds = [
