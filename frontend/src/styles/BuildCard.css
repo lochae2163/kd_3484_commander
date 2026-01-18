@@ -1,0 +1,118 @@
+.build-card {
+  background: #0f3460;
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  border-left: 4px solid transparent;
+}
+
+.build-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.build-card.troop-infantry {
+  border-left-color: #3498db;
+}
+
+.build-card.troop-cavalry {
+  border-left-color: #e74c3c;
+}
+
+.build-card.troop-archer {
+  border-left-color: #2ecc71;
+}
+
+.build-card.troop-leadership {
+  border-left-color: #9b59b6;
+}
+
+.build-card.empty {
+  background: rgba(15, 52, 96, 0.5);
+  border-style: dashed;
+}
+
+.build-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.build-card-header h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.build-card-content {
+  color: #94a3b8;
+}
+
+.commanders {
+  margin-bottom: 1rem;
+}
+
+.commander {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.commander-label {
+  color: #64748b;
+}
+
+.commander-name {
+  color: #fff;
+}
+
+.equipment-summary {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.build-card-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  padding: 2rem 0;
+}
+
+.plus-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.build-card .delete-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.build-card:hover .delete-btn {
+  opacity: 1;
+}
+
+.build-card .delete-btn:hover {
+  background: #ff6b6b;
+  color: #fff;
+}

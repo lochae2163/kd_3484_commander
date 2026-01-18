@@ -1,29 +1,21 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
 
-function Header({ activeTab, setActiveTab }) {
+function Header({ onLogout }) {
+  const navigate = useNavigate();
+
   return (
     <header className="header">
       <div className="header-content">
-        <div className="logo">
-          <h1>ROK Commander Calculator</h1>
-          <span className="subtitle">Rally & Garrison Leaders Ranking</span>
+        <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+          <h1>ROK Data Keeper</h1>
+          <span className="subtitle">Alliance Build Tracker</span>
         </div>
 
-        <nav className="nav-tabs">
-          <button
-            className={`nav-tab ${activeTab === 'calculator' ? 'active' : ''}`}
-            onClick={() => setActiveTab('calculator')}
-          >
-            Calculator
-          </button>
-          <button
-            className={`nav-tab ${activeTab === 'leaderboard' ? 'active' : ''}`}
-            onClick={() => setActiveTab('leaderboard')}
-          >
-            Leaderboard
-          </button>
-        </nav>
+        <button className="logout-btn" onClick={onLogout}>
+          Logout
+        </button>
       </div>
     </header>
   );

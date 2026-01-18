@@ -9,26 +9,60 @@ const api = axios.create({
   },
 });
 
-// Data endpoints
-export const dataService = {
-  getRoles: () => api.get('/data/roles'),
-  getEquipment: (type = null) => api.get('/data/equipment', { params: type ? { type } : {} }),
-  getInscriptions: (rarity = null) => api.get('/data/inscriptions', { params: rarity ? { rarity } : {} }),
-  getVIPBonuses: () => api.get('/data/vip'),
-  getCivilisations: () => api.get('/data/civilisations'),
-  getSpendingTiers: () => api.get('/data/spending'),
-  getCitySkins: () => api.get('/data/cityskins'),
-  getSetBonuses: () => api.get('/data/setbonuses'),
-  getFormations: () => api.get('/data/formations'),
+// Set auth password for all requests
+export const setAuthPassword = (password) => {
+  if (password) {
+    api.defaults.headers.common['Authorization'] = password;
+    localStorage.setItem('rokPassword', password);
+  } else {
+    delete api.defaults.headers.common['Authorization'];
+    localStorage.removeItem('rokPassword');
+  }
 };
 
-// Calculator endpoints
-export const calculatorService = {
-  calculateBuild: (buildData) => api.post('/calculator/calculate', buildData),
-  getLeaderboard: (role, limit = 50) => api.get(`/calculator/leaderboard/${encodeURIComponent(role)}`, { params: { limit } }),
-  getPlayerBuilds: (playerName) => api.get(`/calculator/player/${encodeURIComponent(playerName)}`),
-  getBuild: (id) => api.get(`/calculator/build/${id}`),
-  deleteBuild: (id) => api.delete(`/calculator/build/${id}`),
+// Initialize password from localStorage
+const savedPassword = localStorage.getItem('rokPassword');
+if (savedPassword) {
+  api.defaults.headers.common['Authorization'] = savedPassword;
+}
+
+// Auth service
+export const authService = {
+  verifyPassword: (password) => api.post('/governors/auth/verify', { password }),
+  isAuthenticated: () => !!localStorage.getItem('rokPassword'),
+  logout: () => {
+    localStorage.removeItem('rokPassword');
+    delete api.defaults.headers.common['Authorization'];
+  },
+};
+
+// Governor service
+export const governorService = {
+  getAll: (search = '', sortBy = 'name', order = 'asc') =>
+    api.get('/governors', { params: { search, sortBy, order } }),
+  getById: (id) => api.get(`/governors/${id}`),
+  create: (data) => api.post('/governors', data),
+  update: (id, data) => api.put(`/governors/${id}`, data),
+  delete: (id) => api.delete(`/governors/${id}`),
+};
+
+// Build service
+export const buildService = {
+  getByGovernor: (governorId) => api.get(`/governors/${governorId}/builds`),
+  getById: (governorId, buildId) => api.get(`/governors/${governorId}/builds/${buildId}`),
+  create: (governorId, data) => api.post(`/governors/${governorId}/builds`, data),
+  update: (governorId, buildId, data) => api.put(`/governors/${governorId}/builds/${buildId}`, data),
+  delete: (governorId, buildId) => api.delete(`/governors/${governorId}/builds/${buildId}`),
+};
+
+// Data service (reference data)
+export const dataService = {
+  getCommanders: (troopType = null, role = null) =>
+    api.get('/data/commanders', { params: { troopType, role } }),
+  getEquipment: (type = null) =>
+    api.get('/data/equipment', { params: type ? { type } : {} }),
+  getInscriptions: (rarity = null) =>
+    api.get('/data/inscriptions', { params: rarity ? { rarity } : {} }),
 };
 
 export default api;

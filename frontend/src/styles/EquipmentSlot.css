@@ -1,0 +1,73 @@
+.equipment-slot {
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.slot-label {
+  display: block;
+  color: #e94560;
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.equipment-select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 2px solid #0f3460;
+  border-radius: 6px;
+  background: #0f3460;
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  cursor: pointer;
+}
+
+.equipment-select:focus {
+  border-color: #e94560;
+}
+
+.equipment-details {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  align-items: center;
+}
+
+.iconic-select {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.iconic-select label {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.iconic-select select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #0f3460;
+  border-radius: 4px;
+  background: #0f3460;
+  color: #fff;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.crit-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.crit-checkbox input {
+  cursor: pointer;
+}

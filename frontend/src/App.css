@@ -21,7 +21,7 @@ body {
   flex-direction: column;
 }
 
-.container {
+.main-content {
   flex: 1;
   max-width: 1600px;
   margin: 0 auto;
@@ -33,13 +33,13 @@ body {
   background: #0f0f1a;
   padding: 1.5rem;
   text-align: center;
-  border-top: 1px solid rgba(255, 215, 0, 0.1);
+  border-top: 1px solid rgba(233, 69, 96, 0.1);
   margin-top: auto;
 }
 
 .footer p {
   margin: 0.25rem 0;
-  color: #6c757d;
+  color: #64748b;
   font-size: 0.85rem;
 }
 

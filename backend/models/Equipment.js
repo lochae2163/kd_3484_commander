@@ -59,6 +59,10 @@ const equipmentSchema = new mongoose.Schema({
   special_talent_available: {
     type: Boolean,
     default: true
+  },
+  imageUrl: {
+    type: String,
+    default: null
   }
 }, { timestamps: true });
 

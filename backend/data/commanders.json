@@ -1,0 +1,466 @@
+[
+  {
+    "commanderId": "scipio-aemilianus",
+    "name": "Scipio Aemilianus",
+    "troopType": "infantry",
+    "roles": ["rally"],
+    "damageType": "smite",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "william-wallace",
+    "name": "William Wallace",
+    "troopType": "infantry",
+    "roles": ["rally", "secondary"],
+    "damageType": "smite",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "tariq-ibn-ziyad",
+    "name": "Tariq ibn Ziyad",
+    "troopType": "infantry",
+    "roles": ["rally"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "sargon-the-great",
+    "name": "Sargon the Great",
+    "troopType": "infantry",
+    "roles": ["rally"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "guan-yu",
+    "name": "Guan Yu",
+    "troopType": "infantry",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "leonidas-i",
+    "name": "Leonidas I",
+    "troopType": "infantry",
+    "roles": ["rally", "secondary"],
+    "damageType": "support",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "bai-qi",
+    "name": "Bai Qi",
+    "troopType": "infantry",
+    "roles": ["rally", "secondary"],
+    "damageType": "smite",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "zenobia",
+    "name": "Zenobia",
+    "troopType": "infantry",
+    "roles": ["garrison"],
+    "damageType": "support",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "gorgo",
+    "name": "Gorgo",
+    "troopType": "infantry",
+    "roles": ["garrison", "secondary"],
+    "damageType": "smite",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "flavius-aetius",
+    "name": "Flavius Aetius",
+    "troopType": "infantry",
+    "roles": ["garrison"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "liu-che",
+    "name": "Liu Che",
+    "troopType": "infantry",
+    "roles": ["garrison", "secondary"],
+    "damageType": "smite",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "scipio-africanus-prime",
+    "name": "Scipio Africanus Prime",
+    "troopType": "infantry",
+    "roles": ["garrison", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "charles-martel",
+    "name": "Charles Martel",
+    "troopType": "infantry",
+    "roles": ["garrison", "secondary"],
+    "damageType": "tank",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "constantine-i",
+    "name": "Constantine I",
+    "troopType": "infantry",
+    "roles": ["garrison", "secondary"],
+    "damageType": "tank",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "richard-i",
+    "name": "Richard I",
+    "troopType": "infantry",
+    "roles": ["garrison", "secondary"],
+    "damageType": "tank",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "tokugawa-ieyasu",
+    "name": "Tokugawa Ieyasu",
+    "troopType": "infantry",
+    "roles": ["garrison"],
+    "damageType": "smite",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "sun-tzu",
+    "name": "Sun Tzu",
+    "troopType": "infantry",
+    "roles": ["garrison", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "alexander-nevsky",
+    "name": "Alexander Nevsky",
+    "troopType": "cavalry",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "justinian-i",
+    "name": "Justinian I",
+    "troopType": "cavalry",
+    "roles": ["rally"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "xiang-yu",
+    "name": "Xiang Yu",
+    "troopType": "cavalry",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "attila",
+    "name": "Attila",
+    "troopType": "cavalry",
+    "roles": ["rally"],
+    "damageType": "normal_attack",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "takeda-shingen",
+    "name": "Takeda Shingen",
+    "troopType": "cavalry",
+    "roles": ["rally", "secondary"],
+    "damageType": "normal_attack",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "achilles",
+    "name": "Achilles",
+    "troopType": "cavalry",
+    "roles": ["rally", "secondary"],
+    "damageType": "combo",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "gang-gamchan",
+    "name": "Gang Gamchan",
+    "troopType": "cavalry",
+    "roles": ["rally", "secondary"],
+    "damageType": "combo",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "arthur-pendragon",
+    "name": "Arthur Pendragon",
+    "troopType": "cavalry",
+    "roles": ["rally", "secondary"],
+    "damageType": "combo",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "chandragupta-maurya",
+    "name": "Chandragupta Maurya",
+    "troopType": "cavalry",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "subutai",
+    "name": "Subutai",
+    "troopType": "cavalry",
+    "roles": ["rally", "secondary"],
+    "damageType": "normal_attack",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "minamoto-no-yoshitsune",
+    "name": "Minamoto no Yoshitsune",
+    "troopType": "cavalry",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "genghis-khan",
+    "name": "Genghis Khan",
+    "troopType": "cavalry",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "saladin",
+    "name": "Saladin",
+    "troopType": "cavalry",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "eleanor-of-aquitaine",
+    "name": "Eleanor of Aquitaine",
+    "troopType": "cavalry",
+    "roles": ["garrison"],
+    "damageType": "support",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "david-iv",
+    "name": "David IV",
+    "troopType": "cavalry",
+    "roles": ["garrison", "secondary"],
+    "damageType": "combo",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "hector",
+    "name": "Hector",
+    "troopType": "cavalry",
+    "roles": ["garrison", "secondary"],
+    "damageType": "combo",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "jadwiga",
+    "name": "Jadwiga",
+    "troopType": "cavalry",
+    "roles": ["garrison", "secondary"],
+    "damageType": "cavalry",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "jan-zizka",
+    "name": "Jan Zizka",
+    "troopType": "cavalry",
+    "roles": ["garrison", "secondary"],
+    "damageType": "mixed",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "hermann-prime",
+    "name": "Hermann Prime",
+    "troopType": "archer",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "zhuge-liang",
+    "name": "Zhuge Liang",
+    "troopType": "archer",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "ashurbanipal",
+    "name": "Ashurbanipal",
+    "troopType": "archer",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "boudica-prime",
+    "name": "Boudica Prime",
+    "troopType": "archer",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "nebuchadnezzar-ii",
+    "name": "Nebuchadnezzar II",
+    "troopType": "archer",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "cyrus-the-great",
+    "name": "Cyrus the Great",
+    "troopType": "archer",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "yi-seong-gye",
+    "name": "Yi Seong-Gye",
+    "troopType": "archer",
+    "roles": ["rally", "garrison", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "ramesses-ii",
+    "name": "Ramesses II",
+    "troopType": "archer",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "tomyris",
+    "name": "Tomyris",
+    "troopType": "archer",
+    "roles": ["rally", "secondary"],
+    "damageType": "poison",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "gilgamesh",
+    "name": "Gilgamesh",
+    "troopType": "archer",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "qin-shi-huang",
+    "name": "Qin Shi Huang",
+    "troopType": "archer",
+    "roles": ["secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "shapur",
+    "name": "Shapur",
+    "troopType": "archer",
+    "roles": ["rally", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "dido",
+    "name": "Dido",
+    "troopType": "archer",
+    "roles": ["garrison"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "heraclius",
+    "name": "Heraclius",
+    "troopType": "archer",
+    "roles": ["garrison", "secondary"],
+    "damageType": "mixed",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "artemisia-i",
+    "name": "Artemisia I",
+    "troopType": "archer",
+    "roles": ["garrison", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "amanitore",
+    "name": "Amanitore",
+    "troopType": "archer",
+    "roles": ["garrison", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "seondeok",
+    "name": "Seondeok",
+    "troopType": "archer",
+    "roles": ["garrison", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "hera",
+    "name": "Hera",
+    "troopType": "archer",
+    "roles": ["garrison", "secondary"],
+    "damageType": "skill",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "yi-sun-sin",
+    "name": "Yi Sun-Sin",
+    "troopType": "leadership",
+    "roles": ["garrison"],
+    "damageType": "mixed",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "theodora",
+    "name": "Theodora",
+    "troopType": "leadership",
+    "roles": ["garrison", "secondary"],
+    "damageType": "support",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "wu-zetian",
+    "name": "Wu Zetian",
+    "troopType": "leadership",
+    "roles": ["garrison", "secondary"],
+    "damageType": "support",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "aethelflaed",
+    "name": "Aethelflaed",
+    "troopType": "leadership",
+    "roles": ["garrison", "secondary"],
+    "damageType": "debuff",
+    "imageUrl": null
+  },
+  {
+    "commanderId": "matthias-i-corvinus",
+    "name": "Matthias I Corvinus",
+    "troopType": "leadership",
+    "roles": ["garrison"],
+    "damageType": "infantry",
+    "imageUrl": null
+  }
+]
