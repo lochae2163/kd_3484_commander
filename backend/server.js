@@ -104,23 +104,11 @@ app.get('/api/reseed', async (req, res) => {
 
     console.log('Clearing database...');
 
-    // Drop collections entirely to remove old indexes
-    const db = Commander.db;
-    const collections = await db.listCollections().toArray();
-    const collectionNames = collections.map(c => c.name);
-
-    if (collectionNames.includes('commanders')) {
-      await db.dropCollection('commanders');
-    }
-    if (collectionNames.includes('equipment')) {
-      await db.dropCollection('equipment');
-    }
-    if (collectionNames.includes('inscriptions')) {
-      await db.dropCollection('inscriptions');
-    }
-    if (collectionNames.includes('armaments')) {
-      await db.dropCollection('armaments');
-    }
+    // Drop collections entirely to remove old indexes (ignore errors if collection doesn't exist)
+    try { await Commander.collection.drop(); } catch (e) { /* collection may not exist */ }
+    try { await Equipment.collection.drop(); } catch (e) { /* collection may not exist */ }
+    try { await Inscription.collection.drop(); } catch (e) { /* collection may not exist */ }
+    try { await Armament.collection.drop(); } catch (e) { /* collection may not exist */ }
 
     console.log('Re-seeding database...');
 
