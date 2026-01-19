@@ -81,7 +81,12 @@ function GovernorDetail() {
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return (
+      <div className="loading">
+        <div className="loading-spinner"></div>
+        <span>Loading governor...</span>
+      </div>
+    );
   }
 
   if (!governor) {

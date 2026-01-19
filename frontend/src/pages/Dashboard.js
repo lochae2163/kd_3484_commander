@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { governorService, buildService } from '../services/api';
 import GovernorForm from '../components/GovernorForm';
+import GovernorCard from '../components/GovernorCard';
 import '../styles/Dashboard.css';
 
 const TROOP_TYPES = ['infantry', 'cavalry', 'archer', 'leadership'];
@@ -12,6 +13,8 @@ function Dashboard() {
   useEffect(() => {
     document.title = '3584 Commanders - Dashboard';
   }, []);
+
+  const [activeTab, setActiveTab] = useState('governors');
   const [builds, setBuilds] = useState([]);
   const [governors, setGovernors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,11 +22,13 @@ function Dashboard() {
   const [showForm, setShowForm] = useState(false);
   const [troopFilter, setTroopFilter] = useState('');
   const [buildTypeFilter, setBuildTypeFilter] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
+      setError('');
       const [buildsRes, governorsRes] = await Promise.all([
         buildService.getAll(troopFilter || null, buildTypeFilter || null),
         governorService.getAll()
@@ -31,7 +36,7 @@ function Dashboard() {
       setBuilds(buildsRes.data.builds || []);
       setGovernors(governorsRes.data.governors || []);
     } catch (err) {
-      setError('Failed to load data');
+      setError('Failed to load data. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -49,6 +54,17 @@ function Dashboard() {
       loadData();
     } catch (err) {
       throw err;
+    }
+  };
+
+  const handleDeleteGovernor = async (governorId) => {
+    if (!window.confirm('Delete this governor and all their builds?')) return;
+
+    try {
+      await governorService.delete(governorId);
+      loadData();
+    } catch (err) {
+      setError('Failed to delete governor');
     }
   };
 
@@ -89,102 +105,167 @@ function Dashboard() {
     return Object.values(equipment).filter(e => e && e.equipmentId).length;
   };
 
+  // Filter governors by search query
+  const filteredGovernors = governors.filter(g =>
+    g.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1>All Builds</h1>
+        <h1>3584 Commanders</h1>
         <button className="btn-primary" onClick={() => setShowForm(true)}>
           + Add Governor
         </button>
       </div>
 
-      <div className="filters-bar">
-        <div className="filter-group">
-          <label>Troop Type</label>
-          <select value={troopFilter} onChange={(e) => setTroopFilter(e.target.value)}>
-            <option value="">All Troops</option>
-            {TROOP_TYPES.map((type) => (
-              <option key={type} value={type}>
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <label>Build Type</label>
-          <select value={buildTypeFilter} onChange={(e) => setBuildTypeFilter(e.target.value)}>
-            <option value="">All Types</option>
-            {BUILD_TYPES.map((type) => (
-              <option key={type} value={type}>
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="filter-stats">
-          <span>{builds.length} builds</span>
-          <span>{governors.length} governors</span>
-        </div>
+      {/* Tab Navigation */}
+      <div className="tabs">
+        <button
+          className={`tab ${activeTab === 'governors' ? 'active' : ''}`}
+          onClick={() => setActiveTab('governors')}
+        >
+          Governors ({governors.length})
+        </button>
+        <button
+          className={`tab ${activeTab === 'builds' ? 'active' : ''}`}
+          onClick={() => setActiveTab('builds')}
+        >
+          All Builds ({builds.length})
+        </button>
       </div>
 
       {error && <div className="error-message">{error}</div>}
 
-      {loading ? (
-        <div className="loading">Loading...</div>
-      ) : builds.length === 0 ? (
-        <div className="no-results">
-          {troopFilter || buildTypeFilter
-            ? 'No builds match your filters'
-            : 'No builds yet. Add a governor and create builds to get started!'}
-        </div>
-      ) : (
-        <div className="builds-table-container">
-          <table className="builds-table">
-            <thead>
-              <tr>
-                <th>Governor</th>
-                <th>Troop Type</th>
-                <th>Build Type</th>
-                <th>Primary</th>
-                <th>Secondary</th>
-                <th>Formation</th>
-                <th>Equipment</th>
-                <th>Inscriptions</th>
-                <th>Updated</th>
-              </tr>
-            </thead>
-            <tbody>
-              {builds.map((build) => (
-                <tr
-                  key={build._id}
-                  onClick={() => navigate(`/governor/${build.governorId}/build/${build._id}?troopType=${build.troopType}&buildType=${build.buildType}`)}
-                  className="build-row"
-                >
-                  <td className="governor-name">{build.governorName}</td>
-                  <td>
-                    <span className={`troop-badge ${build.troopType}`}>
-                      {build.troopType}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`build-type-badge ${build.buildType}`}>
-                      {build.buildType}
-                    </span>
-                  </td>
-                  <td>{build.primaryCommander || '-'}</td>
-                  <td>{build.secondaryCommander || '-'}</td>
-                  <td>{getFormationName(build.armament?.formation)}</td>
-                  <td className="count-cell">{countEquipment(build.equipment)}/7</td>
-                  <td className="count-cell">{countArmamentInscriptions(build.armament)}</td>
-                  <td className="date-cell">{formatDate(build.updatedAt)}</td>
-                </tr>
+      {/* Governors Tab */}
+      {activeTab === 'governors' && (
+        <>
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search governors..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {loading ? (
+            <div className="loading">
+              <div className="loading-spinner"></div>
+              <span>Loading governors...</span>
+            </div>
+          ) : filteredGovernors.length === 0 ? (
+            <div className="no-results">
+              {searchQuery
+                ? `No governors found matching "${searchQuery}"`
+                : 'No governors yet. Click "Add Governor" to get started!'}
+            </div>
+          ) : (
+            <div className="governors-grid">
+              {filteredGovernors.map((governor) => (
+                <GovernorCard
+                  key={governor._id}
+                  governor={governor}
+                  onClick={() => navigate(`/governor/${governor._id}`)}
+                  onDelete={() => handleDeleteGovernor(governor._id)}
+                />
               ))}
-            </tbody>
-          </table>
-        </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* All Builds Tab */}
+      {activeTab === 'builds' && (
+        <>
+          <div className="filters-bar">
+            <div className="filter-group">
+              <label>Troop Type</label>
+              <select value={troopFilter} onChange={(e) => setTroopFilter(e.target.value)}>
+                <option value="">All Troops</option>
+                {TROOP_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <label>Build Type</label>
+              <select value={buildTypeFilter} onChange={(e) => setBuildTypeFilter(e.target.value)}>
+                <option value="">All Types</option>
+                {BUILD_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-stats">
+              <span>{builds.length} builds</span>
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="loading">
+              <div className="loading-spinner"></div>
+              <span>Loading builds...</span>
+            </div>
+          ) : builds.length === 0 ? (
+            <div className="no-results">
+              {troopFilter || buildTypeFilter
+                ? 'No builds match your filters'
+                : 'No builds yet. Add a governor and create builds to get started!'}
+            </div>
+          ) : (
+            <div className="builds-table-container">
+              <table className="builds-table">
+                <thead>
+                  <tr>
+                    <th>Governor</th>
+                    <th>Troop Type</th>
+                    <th>Build Type</th>
+                    <th>Primary</th>
+                    <th>Secondary</th>
+                    <th>Formation</th>
+                    <th>Equipment</th>
+                    <th>Inscriptions</th>
+                    <th>Updated</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {builds.map((build) => (
+                    <tr
+                      key={build._id}
+                      onClick={() => navigate(`/governor/${build.governorId}/build/${build._id}?troopType=${build.troopType}&buildType=${build.buildType}`)}
+                      className="build-row"
+                    >
+                      <td className="governor-name">{build.governorName}</td>
+                      <td>
+                        <span className={`troop-badge ${build.troopType}`}>
+                          {build.troopType}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={`build-type-badge ${build.buildType}`}>
+                          {build.buildType}
+                        </span>
+                      </td>
+                      <td>{build.primaryCommander || '-'}</td>
+                      <td>{build.secondaryCommander || '-'}</td>
+                      <td>{getFormationName(build.armament?.formation)}</td>
+                      <td className="count-cell">{countEquipment(build.equipment)}/7</td>
+                      <td className="count-cell">{countArmamentInscriptions(build.armament)}</td>
+                      <td className="date-cell">{formatDate(build.updatedAt)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
       )}
 
       {showForm && (

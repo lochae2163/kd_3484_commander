@@ -116,3 +116,14 @@
   background: #ff6b6b;
   color: #fff;
 }
+
+/* Mobile - always show delete button for touch devices */
+@media (max-width: 768px) {
+  .build-card .delete-btn {
+    opacity: 0.7;
+  }
+
+  .build-card:hover {
+    transform: none;
+  }
+}

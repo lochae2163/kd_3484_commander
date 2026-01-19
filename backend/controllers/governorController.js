@@ -253,6 +253,51 @@ export const getBuildById = async (req, res) => {
   }
 };
 
+// Validation helpers
+const INSCRIPTION_LIMITS = {
+  S: 1,
+  A: 3,
+  B: 4,
+  C: 4
+};
+
+const validateBuildType = (troopType, buildType) => {
+  // Leadership only supports garrison
+  if (troopType === 'leadership' && buildType === 'rally') {
+    return 'Leadership troop type only supports garrison builds';
+  }
+  return null;
+};
+
+const validateArmamentInscriptions = (armament) => {
+  if (!armament) return null;
+
+  const slots = ['emblem', 'flag', 'instrument', 'scroll'];
+
+  for (const slot of slots) {
+    if (armament[slot]?.inscriptions) {
+      const inscriptions = armament[slot].inscriptions;
+
+      // Count inscriptions by tier
+      const tierCounts = { S: 0, A: 0, B: 0, C: 0 };
+      for (const inscription of inscriptions) {
+        if (inscription.tier && tierCounts[inscription.tier] !== undefined) {
+          tierCounts[inscription.tier]++;
+        }
+      }
+
+      // Check limits
+      for (const [tier, count] of Object.entries(tierCounts)) {
+        if (count > INSCRIPTION_LIMITS[tier]) {
+          return `${slot} slot exceeds maximum ${tier}-tier inscriptions (max ${INSCRIPTION_LIMITS[tier]}, got ${count})`;
+        }
+      }
+    }
+  }
+
+  return null;
+};
+
 /**
  * Create a build for a governor
  */
@@ -276,6 +321,18 @@ export const createBuild = async (req, res) => {
 
     if (!troopType || !buildType) {
       return res.status(400).json({ error: 'Troop type and build type are required' });
+    }
+
+    // Validate build type for troop type
+    const buildTypeError = validateBuildType(troopType, buildType);
+    if (buildTypeError) {
+      return res.status(400).json({ error: buildTypeError });
+    }
+
+    // Validate armament inscriptions
+    const inscriptionError = validateArmamentInscriptions(armament);
+    if (inscriptionError) {
+      return res.status(400).json({ error: inscriptionError });
     }
 
     // Check if build already exists for this type
@@ -323,6 +380,14 @@ export const updateBuild = async (req, res) => {
     const build = await GovernorBuild.findOne({ _id: buildId, governorId: id });
     if (!build) {
       return res.status(404).json({ error: 'Build not found' });
+    }
+
+    // Validate armament inscriptions if being updated
+    if (updates.armament) {
+      const inscriptionError = validateArmamentInscriptions(updates.armament);
+      if (inscriptionError) {
+        return res.status(400).json({ error: inscriptionError });
+      }
     }
 
     // Update allowed fields
