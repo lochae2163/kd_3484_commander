@@ -239,6 +239,60 @@
   font-size: 0.9rem;
 }
 
+/* Build type cell - stacked badges */
+.build-type-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Commanders cell */
+.commanders-cell {
+  min-width: 180px;
+}
+
+.commander-pair {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.commander-pair .primary {
+  color: #fff;
+  font-weight: 500;
+}
+
+.commander-pair .separator {
+  color: #64748b;
+}
+
+.commander-pair .secondary {
+  color: #94a3b8;
+}
+
+/* Iconic equipment info */
+.iconic-info {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.iconic-info .avg-level {
+  color: #ffd700;
+  font-size: 0.75rem;
+}
+
+/* Crit badge */
+.crit-badge {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 /* Loading state with spinner */
 .loading {
   display: flex;

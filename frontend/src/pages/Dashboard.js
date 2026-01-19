@@ -105,6 +105,24 @@ function Dashboard() {
     return Object.values(equipment).filter(e => e && e.equipmentId).length;
   };
 
+  const countIconicEquipment = (equipment) => {
+    if (!equipment) return 0;
+    return Object.values(equipment).filter(e => e && e.iconicLevel && e.iconicLevel > 0).length;
+  };
+
+  const countCritEquipment = (equipment) => {
+    if (!equipment) return 0;
+    return Object.values(equipment).filter(e => e && e.hasCrit).length;
+  };
+
+  const getAverageIconicLevel = (equipment) => {
+    if (!equipment) return 0;
+    const iconicItems = Object.values(equipment).filter(e => e && e.iconicLevel && e.iconicLevel > 0);
+    if (iconicItems.length === 0) return 0;
+    const sum = iconicItems.reduce((acc, e) => acc + e.iconicLevel, 0);
+    return (sum / iconicItems.length).toFixed(1);
+  };
+
   // Filter governors by search query
   const filteredGovernors = governors.filter(g =>
     g.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -225,42 +243,67 @@ function Dashboard() {
                 <thead>
                   <tr>
                     <th>Governor</th>
-                    <th>Troop Type</th>
-                    <th>Build Type</th>
-                    <th>Primary</th>
-                    <th>Secondary</th>
+                    <th>Build</th>
+                    <th>Commanders</th>
                     <th>Formation</th>
                     <th>Equipment</th>
+                    <th>Iconic</th>
+                    <th>Crit</th>
                     <th>Inscriptions</th>
                     <th>Updated</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {builds.map((build) => (
-                    <tr
-                      key={build._id}
-                      onClick={() => navigate(`/governor/${build.governorId}/build/${build._id}?troopType=${build.troopType}&buildType=${build.buildType}`)}
-                      className="build-row"
-                    >
-                      <td className="governor-name">{build.governorName}</td>
-                      <td>
-                        <span className={`troop-badge ${build.troopType}`}>
-                          {build.troopType}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`build-type-badge ${build.buildType}`}>
-                          {build.buildType}
-                        </span>
-                      </td>
-                      <td>{build.primaryCommander || '-'}</td>
-                      <td>{build.secondaryCommander || '-'}</td>
-                      <td>{getFormationName(build.armament?.formation)}</td>
-                      <td className="count-cell">{countEquipment(build.equipment)}/7</td>
-                      <td className="count-cell">{countArmamentInscriptions(build.armament)}</td>
-                      <td className="date-cell">{formatDate(build.updatedAt)}</td>
-                    </tr>
-                  ))}
+                  {builds.map((build) => {
+                    const equipCount = countEquipment(build.equipment);
+                    const iconicCount = countIconicEquipment(build.equipment);
+                    const critCount = countCritEquipment(build.equipment);
+                    const avgIconic = getAverageIconicLevel(build.equipment);
+                    const inscriptionCount = countArmamentInscriptions(build.armament);
+
+                    return (
+                      <tr
+                        key={build._id}
+                        onClick={() => navigate(`/governor/${build.governorId}/build/${build._id}?troopType=${build.troopType}&buildType=${build.buildType}`)}
+                        className="build-row"
+                      >
+                        <td className="governor-name">{build.governorName}</td>
+                        <td>
+                          <div className="build-type-cell">
+                            <span className={`troop-badge ${build.troopType}`}>
+                              {build.troopType}
+                            </span>
+                            <span className={`build-type-badge ${build.buildType}`}>
+                              {build.buildType}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="commanders-cell">
+                          <div className="commander-pair">
+                            <span className="primary">{build.primaryCommander || '-'}</span>
+                            <span className="separator">/</span>
+                            <span className="secondary">{build.secondaryCommander || '-'}</span>
+                          </div>
+                        </td>
+                        <td>{getFormationName(build.armament?.formation)}</td>
+                        <td className="count-cell">{equipCount}/7</td>
+                        <td className="count-cell">
+                          {iconicCount > 0 ? (
+                            <span className="iconic-info">
+                              {iconicCount} <span className="avg-level">(avg {avgIconic})</span>
+                            </span>
+                          ) : '-'}
+                        </td>
+                        <td className="count-cell">
+                          {critCount > 0 ? (
+                            <span className="crit-badge">{critCount}</span>
+                          ) : '-'}
+                        </td>
+                        <td className="count-cell">{inscriptionCount > 0 ? inscriptionCount : '-'}</td>
+                        <td className="date-cell">{formatDate(build.updatedAt)}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
