@@ -15,7 +15,6 @@ const governorSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// Index for faster queries
-governorSchema.index({ name: 1 });
+// Note: name field already has an index due to unique: true
 
 export default mongoose.model('Governor', governorSchema);
