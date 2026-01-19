@@ -18,7 +18,8 @@ function BuildForm() {
   const buildType = searchParams.get('buildType');
 
   const [governor, setGovernor] = useState(null);
-  const [commanders, setCommanders] = useState([]);
+  const [commanders, setCommanders] = useState([]);  // Filtered by troopType for primary
+  const [allCommanders, setAllCommanders] = useState([]);  // All commanders for secondary
   const [equipment, setEquipment] = useState([]);
   const [armaments, setArmaments] = useState([]);
   const [allInscriptions, setAllInscriptions] = useState([]);
@@ -64,9 +65,10 @@ function BuildForm() {
     try {
       setLoading(true);
 
-      const [govRes, commandersRes, equipmentRes, inscriptionsRes, armamentsRes] = await Promise.all([
+      const [govRes, commandersRes, allCommandersRes, equipmentRes, inscriptionsRes, armamentsRes] = await Promise.all([
         governorService.getById(id),
-        dataService.getCommanders(troopType),
+        dataService.getCommanders(troopType),  // Filtered by troopType for primary
+        dataService.getCommanders(),  // All commanders for secondary
         dataService.getEquipment(),
         dataService.getInscriptions(),
         dataService.getArmaments(),
@@ -74,6 +76,7 @@ function BuildForm() {
 
       setGovernor(govRes.data.governor);
       setCommanders(commandersRes.data.commanders || []);
+      setAllCommanders(allCommandersRes.data.commanders || []);
       setEquipment(equipmentRes.data.equipment || []);
       setAllInscriptions(inscriptionsRes.data.inscriptions || []);
       setArmaments(armamentsRes.data.armaments || []);
@@ -214,7 +217,7 @@ function BuildForm() {
             />
             <CommanderSelect
               label="Secondary Commander"
-              commanders={commanders}
+              commanders={allCommanders}
               value={formData.secondaryCommander}
               onChange={(v) => handleCommanderChange('secondaryCommander', v)}
               filterRole="secondary"
