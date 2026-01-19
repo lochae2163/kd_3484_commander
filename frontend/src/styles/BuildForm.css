@@ -181,6 +181,94 @@
   font-size: 0.9rem;
 }
 
+/* New inscription slots layout */
+.inscription-slots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .inscription-slots {
+    grid-template-columns: 1fr;
+  }
+}
+
+.inscription-slot {
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.slot-title {
+  color: #e94560;
+  font-size: 1.1rem;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #0f3460;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selected-count {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: normal;
+}
+
+.tier-group {
+  margin-bottom: 1rem;
+}
+
+.tier-group:last-child {
+  margin-bottom: 0;
+}
+
+.tier-label {
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.tier-s .tier-label {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+}
+
+.tier-a .tier-label {
+  background: rgba(192, 132, 252, 0.2);
+  color: #c084fc;
+}
+
+.tier-b .tier-label {
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+}
+
+.tier-c .tier-label {
+  background: rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+}
+
+.inscription-name.tier-s {
+  color: #ffd700;
+}
+
+.inscription-name.tier-a {
+  color: #c084fc;
+}
+
+.inscription-name.tier-b {
+  color: #60a5fa;
+}
+
+.inscription-name.tier-c {
+  color: #94a3b8;
+}
+
 .form-actions {
   display: flex;
   gap: 1rem;

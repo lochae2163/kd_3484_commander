@@ -57,15 +57,27 @@ function Dashboard() {
     });
   };
 
-  const getArmamentName = (armamentType) => {
+  const getFormationName = (formation) => {
     const names = {
-      arch: 'Arch',
-      wedge: 'Wedge',
-      hollow_square: 'Hollow Square',
+      pincer: 'Pincer',
+      tercio: 'Tercio',
       delta: 'Delta',
-      pincer: 'Pincer'
+      hollow_square: 'Hollow Square',
+      arch: 'Arch',
+      wedge: 'Wedge'
     };
-    return names[armamentType] || '-';
+    return names[formation] || '-';
+  };
+
+  const countArmamentInscriptions = (armament) => {
+    if (!armament) return 0;
+    let count = 0;
+    ['emblem', 'flag', 'instrument', 'scroll'].forEach(slot => {
+      if (armament[slot]?.inscriptions?.length) {
+        count += armament[slot].inscriptions.length;
+      }
+    });
+    return count;
   };
 
   const countEquipment = (equipment) => {
@@ -73,12 +85,6 @@ function Dashboard() {
     return Object.values(equipment).filter(e => e && e.equipmentId).length;
   };
 
-  const countInscriptions = (inscriptions) => {
-    if (!inscriptions) return 0;
-    return (inscriptions.special?.length || 0) +
-           (inscriptions.rare?.length || 0) +
-           (inscriptions.common?.length || 0);
-  };
 
   return (
     <div className="dashboard">
@@ -140,7 +146,7 @@ function Dashboard() {
                 <th>Build Type</th>
                 <th>Primary</th>
                 <th>Secondary</th>
-                <th>Armament</th>
+                <th>Formation</th>
                 <th>Equipment</th>
                 <th>Inscriptions</th>
                 <th>Updated</th>
@@ -166,9 +172,9 @@ function Dashboard() {
                   </td>
                   <td>{build.primaryCommander || '-'}</td>
                   <td>{build.secondaryCommander || '-'}</td>
-                  <td>{getArmamentName(build.armament?.armamentType)}</td>
+                  <td>{getFormationName(build.armament?.formation)}</td>
                   <td className="count-cell">{countEquipment(build.equipment)}/7</td>
-                  <td className="count-cell">{countInscriptions(build.inscriptions)}</td>
+                  <td className="count-cell">{countArmamentInscriptions(build.armament)}</td>
                   <td className="date-cell">{formatDate(build.updatedAt)}</td>
                 </tr>
               ))}

@@ -63,8 +63,13 @@ export const dataService = {
     api.get('/data/commanders', { params: { troopType, role } }),
   getEquipment: (type = null) =>
     api.get('/data/equipment', { params: type ? { type } : {} }),
-  getInscriptions: (armamentType = null) =>
-    api.get('/data/inscriptions', { params: armamentType ? { armamentType } : {} }),
+  getInscriptions: (formation = null, slot = null, tier = null) => {
+    const params = {};
+    if (formation) params.formation = formation;
+    if (slot) params.slot = slot;
+    if (tier) params.tier = tier;
+    return api.get('/data/inscriptions', { params });
+  },
   getArmaments: () =>
     api.get('/data/armaments'),
 };

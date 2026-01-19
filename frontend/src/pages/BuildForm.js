@@ -6,6 +6,8 @@ import EquipmentSlot from '../components/EquipmentSlot';
 import '../styles/BuildForm.css';
 
 const EQUIPMENT_SLOTS = ['weapon', 'helmet', 'chest', 'gloves', 'legs', 'boots', 'accessory'];
+const ARMAMENT_SLOTS = ['emblem', 'flag', 'instrument', 'scroll'];
+const TIER_ORDER = ['S', 'A', 'B', 'C'];
 
 function BuildForm() {
   const { id, buildId } = useParams();
@@ -20,7 +22,6 @@ function BuildForm() {
   const [equipment, setEquipment] = useState([]);
   const [armaments, setArmaments] = useState([]);
   const [allInscriptions, setAllInscriptions] = useState([]);
-  const [filteredInscriptions, setFilteredInscriptions] = useState({ special: [], rare: [], common: [] });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -38,16 +39,11 @@ function BuildForm() {
       accessory: { equipmentId: null, name: null, iconicLevel: null, hasCrit: false },
     },
     armament: {
-      armamentType: null,
-      attack: null,
-      defense: null,
-      marchSpeed: null,
-      allDamage: null,
-    },
-    inscriptions: {
-      special: [],
-      rare: [],
-      common: [],
+      formation: null,
+      emblem: { inscriptions: [] },
+      flag: { inscriptions: [] },
+      instrument: { inscriptions: [] },
+      scroll: { inscriptions: [] },
     },
   });
 
@@ -55,22 +51,6 @@ function BuildForm() {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, buildId, troopType]);
-
-  // Filter inscriptions when armament type changes
-  useEffect(() => {
-    if (formData.armament.armamentType && allInscriptions.length > 0) {
-      const filtered = allInscriptions.filter(
-        (insc) => insc.armamentType === formData.armament.armamentType
-      );
-      setFilteredInscriptions({
-        special: filtered.filter((i) => i.rarity === 'SPECIAL'),
-        rare: filtered.filter((i) => i.rarity === 'RARE'),
-        common: filtered.filter((i) => i.rarity === 'COMMON'),
-      });
-    } else {
-      setFilteredInscriptions({ special: [], rare: [], common: [] });
-    }
-  }, [formData.armament.armamentType, allInscriptions]);
 
   const loadData = async () => {
     try {
@@ -99,7 +79,6 @@ function BuildForm() {
           secondaryCommander: build.secondaryCommander || '',
           equipment: build.equipment || formData.equipment,
           armament: build.armament || formData.armament,
-          inscriptions: build.inscriptions || formData.inscriptions,
         });
       }
     } catch (err) {
@@ -121,32 +100,32 @@ function BuildForm() {
     }));
   };
 
-  const handleArmamentTypeChange = (armamentType) => {
-    // When armament type changes, clear selected inscriptions
+  const handleFormationChange = (formation) => {
+    // When formation changes, clear all inscriptions
     setFormData((prev) => ({
       ...prev,
-      armament: { ...prev.armament, armamentType: armamentType || null },
-      inscriptions: { special: [], rare: [], common: [] },
+      armament: {
+        formation: formation || null,
+        emblem: { inscriptions: [] },
+        flag: { inscriptions: [] },
+        instrument: { inscriptions: [] },
+        scroll: { inscriptions: [] },
+      },
     }));
   };
 
-  const handleArmamentStatChange = (field, value) => {
-    const numValue = value === '' ? null : parseFloat(value);
-    setFormData((prev) => ({
-      ...prev,
-      armament: { ...prev.armament, [field]: numValue },
-    }));
-  };
-
-  const handleInscriptionToggle = (rarity, inscriptionName) => {
+  const handleInscriptionToggle = (slot, inscriptionId) => {
     setFormData((prev) => {
-      const current = prev.inscriptions[rarity] || [];
-      const updated = current.includes(inscriptionName)
-        ? current.filter((n) => n !== inscriptionName)
-        : [...current, inscriptionName];
+      const current = prev.armament[slot]?.inscriptions || [];
+      const updated = current.includes(inscriptionId)
+        ? current.filter((id) => id !== inscriptionId)
+        : [...current, inscriptionId];
       return {
         ...prev,
-        inscriptions: { ...prev.inscriptions, [rarity]: updated },
+        armament: {
+          ...prev.armament,
+          [slot]: { inscriptions: updated },
+        },
       };
     });
   };
@@ -174,6 +153,23 @@ function BuildForm() {
     }
   };
 
+  // Get inscriptions for a specific formation and slot
+  const getSlotInscriptions = (slot) => {
+    if (!formData.armament.formation) return [];
+    return allInscriptions.filter(
+      (insc) => insc.formation === formData.armament.formation && insc.slot === slot
+    );
+  };
+
+  // Group inscriptions by tier
+  const groupByTier = (inscriptions) => {
+    const grouped = {};
+    TIER_ORDER.forEach((tier) => {
+      grouped[tier] = inscriptions.filter((i) => i.tier === tier);
+    });
+    return grouped;
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -184,7 +180,7 @@ function BuildForm() {
     return `${tt} ${bt}`;
   };
 
-  const selectedArmament = armaments.find((a) => a.armamentId === formData.armament.armamentType);
+  const selectedFormation = armaments.find((a) => a.armamentId === formData.armament.formation);
 
   return (
     <div className="build-form-page">
@@ -238,142 +234,72 @@ function BuildForm() {
           <h2>Armament</h2>
 
           <div className="armament-type-selector">
-            <label>Formation Type</label>
+            <label>Formation</label>
             <select
-              value={formData.armament.armamentType || ''}
-              onChange={(e) => handleArmamentTypeChange(e.target.value)}
+              value={formData.armament.formation || ''}
+              onChange={(e) => handleFormationChange(e.target.value)}
             >
-              <option value="">Select Armament Type</option>
+              <option value="">Select Formation</option>
               {armaments.map((arm) => (
                 <option key={arm.armamentId} value={arm.armamentId}>
-                  {arm.name} - {arm.description}
+                  {arm.name}
                 </option>
               ))}
             </select>
           </div>
 
-          {selectedArmament && (
+          {selectedFormation && (
             <p className="armament-description">
-              <strong>{selectedArmament.name}:</strong> {selectedArmament.description}
+              Selected: <strong>{selectedFormation.name}</strong> formation with 4 slots: Emblem, Flag, Instrument, Scroll
             </p>
           )}
-
-          <h3>Armament Stats</h3>
-          <p className="hint">Only 3 of 4 stats can have values</p>
-          <div className="armament-grid">
-            <div className="armament-field">
-              <label>Attack %</label>
-              <input
-                type="number"
-                step="0.1"
-                value={formData.armament.attack ?? ''}
-                onChange={(e) => handleArmamentStatChange('attack', e.target.value)}
-              />
-            </div>
-            <div className="armament-field">
-              <label>Defense %</label>
-              <input
-                type="number"
-                step="0.1"
-                value={formData.armament.defense ?? ''}
-                onChange={(e) => handleArmamentStatChange('defense', e.target.value)}
-              />
-            </div>
-            <div className="armament-field">
-              <label>March Speed %</label>
-              <input
-                type="number"
-                step="0.1"
-                value={formData.armament.marchSpeed ?? ''}
-                onChange={(e) => handleArmamentStatChange('marchSpeed', e.target.value)}
-              />
-            </div>
-            <div className="armament-field">
-              <label>All Damage %</label>
-              <input
-                type="number"
-                step="0.1"
-                value={formData.armament.allDamage ?? ''}
-                onChange={(e) => handleArmamentStatChange('allDamage', e.target.value)}
-              />
-            </div>
-          </div>
         </section>
 
         <section className="form-section">
           <h2>Inscriptions</h2>
 
-          {!formData.armament.armamentType ? (
-            <p className="hint">Select an armament type above to see available inscriptions</p>
+          {!formData.armament.formation ? (
+            <p className="hint">Select a formation above to see available inscriptions for each slot</p>
           ) : (
-            <>
-              <p className="hint">
-                Showing inscriptions for <strong>{selectedArmament?.name}</strong> formation
-              </p>
+            <div className="inscription-slots">
+              {ARMAMENT_SLOTS.map((slot) => {
+                const slotInscriptions = getSlotInscriptions(slot);
+                const groupedInscriptions = groupByTier(slotInscriptions);
+                const selectedCount = formData.armament[slot]?.inscriptions?.length || 0;
 
-              <div className="inscription-category">
-                <h3>Special (up to 2)</h3>
-                <div className="inscription-options">
-                  {filteredInscriptions.special.length === 0 ? (
-                    <span className="no-inscriptions">No special inscriptions available</span>
-                  ) : (
-                    filteredInscriptions.special.map((insc) => (
-                      <label key={insc.inscriptionId} className="inscription-checkbox" title={insc.effect}>
-                        <input
-                          type="checkbox"
-                          checked={formData.inscriptions.special.includes(insc.name)}
-                          onChange={() => handleInscriptionToggle('special', insc.name)}
-                        />
-                        <span className="inscription-name">{insc.name}</span>
-                        <span className="inscription-effect">{insc.effect}</span>
-                      </label>
-                    ))
-                  )}
-                </div>
-              </div>
+                return (
+                  <div key={slot} className="inscription-slot">
+                    <h3 className="slot-title">
+                      {slot.charAt(0).toUpperCase() + slot.slice(1)}
+                      <span className="selected-count">({selectedCount} selected)</span>
+                    </h3>
 
-              <div className="inscription-category">
-                <h3>Rare (up to 4)</h3>
-                <div className="inscription-options">
-                  {filteredInscriptions.rare.length === 0 ? (
-                    <span className="no-inscriptions">No rare inscriptions available</span>
-                  ) : (
-                    filteredInscriptions.rare.map((insc) => (
-                      <label key={insc.inscriptionId} className="inscription-checkbox" title={insc.effect}>
-                        <input
-                          type="checkbox"
-                          checked={formData.inscriptions.rare.includes(insc.name)}
-                          onChange={() => handleInscriptionToggle('rare', insc.name)}
-                        />
-                        <span className="inscription-name">{insc.name}</span>
-                        <span className="inscription-effect">{insc.effect}</span>
-                      </label>
-                    ))
-                  )}
-                </div>
-              </div>
+                    {TIER_ORDER.map((tier) => {
+                      const tierInscriptions = groupedInscriptions[tier];
+                      if (tierInscriptions.length === 0) return null;
 
-              <div className="inscription-category">
-                <h3>Common (up to 8)</h3>
-                <div className="inscription-options">
-                  {filteredInscriptions.common.length === 0 ? (
-                    <span className="no-inscriptions">No common inscriptions available</span>
-                  ) : (
-                    filteredInscriptions.common.map((insc) => (
-                      <label key={insc.inscriptionId} className="inscription-checkbox" title={insc.effect}>
-                        <input
-                          type="checkbox"
-                          checked={formData.inscriptions.common.includes(insc.name)}
-                          onChange={() => handleInscriptionToggle('common', insc.name)}
-                        />
-                        <span className="inscription-name">{insc.name}</span>
-                        <span className="inscription-effect">{insc.effect}</span>
-                      </label>
-                    ))
-                  )}
-                </div>
-              </div>
-            </>
+                      return (
+                        <div key={tier} className={`tier-group tier-${tier.toLowerCase()}`}>
+                          <h4 className="tier-label">{tier}-Tier</h4>
+                          <div className="inscription-options">
+                            {tierInscriptions.map((insc) => (
+                              <label key={insc.inscriptionId} className="inscription-checkbox">
+                                <input
+                                  type="checkbox"
+                                  checked={formData.armament[slot]?.inscriptions?.includes(insc.inscriptionId)}
+                                  onChange={() => handleInscriptionToggle(slot, insc.inscriptionId)}
+                                />
+                                <span className={`inscription-name tier-${tier.toLowerCase()}`}>{insc.name}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
           )}
         </section>
 

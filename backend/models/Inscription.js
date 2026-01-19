@@ -10,25 +10,28 @@ const inscriptionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  armamentType: {
+  formation: {
     type: String,
     required: true,
-    enum: ['arch', 'wedge', 'hollow_square', 'delta', 'pincer']
+    enum: ['pincer', 'tercio', 'delta', 'hollow_square', 'arch', 'wedge']
   },
-  rarity: {
+  slot: {
     type: String,
     required: true,
-    enum: ['COMMON', 'RARE', 'SPECIAL']
+    enum: ['emblem', 'flag', 'instrument', 'scroll']
   },
-  effect: {
+  tier: {
     type: String,
-    default: ''
+    required: true,
+    enum: ['S', 'A', 'B', 'C']
   }
 }, { timestamps: true });
 
 // Indexes for faster queries
-inscriptionSchema.index({ rarity: 1 });
-inscriptionSchema.index({ armamentType: 1 });
-inscriptionSchema.index({ armamentType: 1, rarity: 1 });
+inscriptionSchema.index({ formation: 1 });
+inscriptionSchema.index({ slot: 1 });
+inscriptionSchema.index({ tier: 1 });
+inscriptionSchema.index({ formation: 1, slot: 1 });
+inscriptionSchema.index({ formation: 1, slot: 1, tier: 1 });
 
 export default mongoose.model('Inscription', inscriptionSchema);

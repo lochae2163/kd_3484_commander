@@ -21,22 +21,22 @@ const equipmentSlotSchema = new mongoose.Schema({
   }
 }, { _id: false });
 
-const armamentSchema = new mongoose.Schema({
-  armamentType: {
-    type: String,
-    enum: ['arch', 'wedge', 'hollow_square', 'delta', 'pincer'],
-    default: null
-  },
-  attack: { type: Number, default: null },
-  defense: { type: Number, default: null },
-  marchSpeed: { type: Number, default: null },
-  allDamage: { type: Number, default: null }
+// Each armament slot can have multiple inscriptions selected
+const armamentSlotSchema = new mongoose.Schema({
+  inscriptions: [{ type: String }]  // Array of inscription IDs
 }, { _id: false });
 
-const inscriptionsSchema = new mongoose.Schema({
-  special: [{ type: String }],
-  rare: [{ type: String }],
-  common: [{ type: String }]
+const armamentSchema = new mongoose.Schema({
+  formation: {
+    type: String,
+    enum: ['pincer', 'tercio', 'delta', 'hollow_square', 'arch', 'wedge'],
+    default: null
+  },
+  // 4 slots, each with their own inscriptions
+  emblem: { type: armamentSlotSchema, default: () => ({ inscriptions: [] }) },
+  flag: { type: armamentSlotSchema, default: () => ({ inscriptions: [] }) },
+  instrument: { type: armamentSlotSchema, default: () => ({ inscriptions: [] }) },
+  scroll: { type: armamentSlotSchema, default: () => ({ inscriptions: [] }) }
 }, { _id: false });
 
 const governorBuildSchema = new mongoose.Schema({
@@ -74,16 +74,20 @@ const governorBuildSchema = new mongoose.Schema({
   },
   armament: {
     type: armamentSchema,
-    default: () => ({})
-  },
-  inscriptions: {
-    type: inscriptionsSchema,
-    default: () => ({ special: [], rare: [], common: [] })
+    default: () => ({
+      formation: null,
+      emblem: { inscriptions: [] },
+      flag: { inscriptions: [] },
+      instrument: { inscriptions: [] },
+      scroll: { inscriptions: [] }
+    })
   }
 }, { timestamps: true });
 
 // Index for faster queries
 governorBuildSchema.index({ governorId: 1 });
 governorBuildSchema.index({ governorId: 1, troopType: 1, buildType: 1 });
+governorBuildSchema.index({ troopType: 1 });
+governorBuildSchema.index({ buildType: 1 });
 
 export default mongoose.model('GovernorBuild', governorBuildSchema);

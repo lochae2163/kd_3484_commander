@@ -44,22 +44,36 @@ export const getAllEquipment = async (req, res) => {
 };
 
 /**
- * Get all inscriptions (optionally filter by rarity and/or armamentType)
+ * Get all inscriptions (optionally filter by formation, slot, and/or tier)
  */
 export const getAllInscriptions = async (req, res) => {
   try {
-    const { rarity, armamentType } = req.query;
+    const { formation, slot, tier } = req.query;
     let query = {};
 
-    if (rarity) {
-      query.rarity = rarity.toUpperCase();
+    if (formation) {
+      query.formation = formation.toLowerCase();
     }
 
-    if (armamentType) {
-      query.armamentType = armamentType.toLowerCase();
+    if (slot) {
+      query.slot = slot.toLowerCase();
     }
 
-    const inscriptions = await Inscription.find(query).sort({ rarity: 1, name: 1 });
+    if (tier) {
+      query.tier = tier.toUpperCase();
+    }
+
+    // Sort by tier (S, A, B, C) then by name
+    const tierOrder = { 'S': 1, 'A': 2, 'B': 3, 'C': 4 };
+    const inscriptions = await Inscription.find(query).sort({ name: 1 });
+
+    // Sort by tier order
+    inscriptions.sort((a, b) => {
+      const tierDiff = (tierOrder[a.tier] || 5) - (tierOrder[b.tier] || 5);
+      if (tierDiff !== 0) return tierDiff;
+      return a.name.localeCompare(b.name);
+    });
+
     res.status(200).json({ success: true, count: inscriptions.length, inscriptions });
   } catch (error) {
     console.error('Error fetching inscriptions:', error);
