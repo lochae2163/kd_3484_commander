@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { governorService, buildService } from '../services/api';
 import GovernorForm from '../components/GovernorForm';
@@ -17,11 +17,7 @@ function Dashboard() {
   const [buildTypeFilter, setBuildTypeFilter] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadData();
-  }, [troopFilter, buildTypeFilter]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [buildsRes, governorsRes] = await Promise.all([
@@ -36,7 +32,11 @@ function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [troopFilter, buildTypeFilter]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleCreateGovernor = async (data) => {
     try {
