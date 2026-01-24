@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { governorService, buildService } from '../services/api';
+import { governorService, buildService, dataService } from '../services/api';
 import GovernorForm from '../components/GovernorForm';
 import GovernorCard from '../components/GovernorCard';
+import { calculateEquipmentStats, formatStat } from '../utils/statsCalculator';
 import '../styles/Dashboard.css';
 
 const TROOP_TYPES = ['infantry', 'cavalry', 'archer', 'leadership'];
@@ -14,9 +15,10 @@ function Dashboard() {
     document.title = '3584 Commanders - Dashboard';
   }, []);
 
-  const [activeTab, setActiveTab] = useState('governors');
+  const [activeTab, setActiveTab] = useState('builds');  // Default to builds tab
   const [builds, setBuilds] = useState([]);
   const [governors, setGovernors] = useState([]);
+  const [equipment, setEquipment] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -29,12 +31,14 @@ function Dashboard() {
     try {
       setLoading(true);
       setError('');
-      const [buildsRes, governorsRes] = await Promise.all([
+      const [buildsRes, governorsRes, equipmentRes] = await Promise.all([
         buildService.getAll(troopFilter || null, buildTypeFilter || null),
-        governorService.getAll()
+        governorService.getAll(),
+        dataService.getEquipment()
       ]);
       setBuilds(buildsRes.data.builds || []);
       setGovernors(governorsRes.data.governors || []);
+      setEquipment(equipmentRes.data.equipment || []);
     } catch (err) {
       setError('Failed to load data. Please try again.');
       console.error(err);
@@ -137,63 +141,25 @@ function Dashboard() {
         </button>
       </div>
 
-      {/* Tab Navigation */}
+      {/* Tab Navigation - Builds first, Governors second */}
       <div className="tabs">
-        <button
-          className={`tab ${activeTab === 'governors' ? 'active' : ''}`}
-          onClick={() => setActiveTab('governors')}
-        >
-          Governors ({governors.length})
-        </button>
         <button
           className={`tab ${activeTab === 'builds' ? 'active' : ''}`}
           onClick={() => setActiveTab('builds')}
         >
           All Builds ({builds.length})
         </button>
+        <button
+          className={`tab ${activeTab === 'governors' ? 'active' : ''}`}
+          onClick={() => setActiveTab('governors')}
+        >
+          Governors ({governors.length})
+        </button>
       </div>
 
       {error && <div className="error-message">{error}</div>}
 
-      {/* Governors Tab */}
-      {activeTab === 'governors' && (
-        <>
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Search governors..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          {loading ? (
-            <div className="loading">
-              <div className="loading-spinner"></div>
-              <span>Loading governors...</span>
-            </div>
-          ) : filteredGovernors.length === 0 ? (
-            <div className="no-results">
-              {searchQuery
-                ? `No governors found matching "${searchQuery}"`
-                : 'No governors yet. Click "Add Governor" to get started!'}
-            </div>
-          ) : (
-            <div className="governors-grid">
-              {filteredGovernors.map((governor) => (
-                <GovernorCard
-                  key={governor._id}
-                  governor={governor}
-                  onClick={() => navigate(`/governor/${governor._id}`)}
-                  onDelete={() => handleDeleteGovernor(governor._id)}
-                />
-              ))}
-            </div>
-          )}
-        </>
-      )}
-
-      {/* All Builds Tab */}
+      {/* All Builds Tab - Now First */}
       {activeTab === 'builds' && (
         <>
           <div className="filters-bar">
@@ -245,11 +211,12 @@ function Dashboard() {
                     <th>Governor</th>
                     <th>Build</th>
                     <th>Commanders</th>
-                    <th>Formation</th>
+                    <th className="stat-header attack">ATK</th>
+                    <th className="stat-header defense">DEF</th>
+                    <th className="stat-header health">HP</th>
                     <th>Equipment</th>
                     <th>Iconic</th>
                     <th>Crit</th>
-                    <th>Inscriptions</th>
                     <th>Updated</th>
                   </tr>
                 </thead>
@@ -259,7 +226,9 @@ function Dashboard() {
                     const iconicCount = countIconicEquipment(build.equipment);
                     const critCount = countCritEquipment(build.equipment);
                     const avgIconic = getAverageIconicLevel(build.equipment);
-                    const inscriptionCount = countArmamentInscriptions(build.armament);
+
+                    // Calculate equipment stats
+                    const stats = calculateEquipmentStats(build.equipment || {}, equipment, build.troopType);
 
                     return (
                       <tr
@@ -285,7 +254,9 @@ function Dashboard() {
                             <span className="secondary">{build.secondaryCommander || '-'}</span>
                           </div>
                         </td>
-                        <td>{getFormationName(build.armament?.formation)}</td>
+                        <td className="stat-cell attack">{formatStat(stats.attack) || '0%'}</td>
+                        <td className="stat-cell defense">{formatStat(stats.defense) || '0%'}</td>
+                        <td className="stat-cell health">{formatStat(stats.health) || '0%'}</td>
                         <td className="count-cell">{equipCount}/8</td>
                         <td className="count-cell">
                           {iconicCount > 0 ? (
@@ -299,13 +270,50 @@ function Dashboard() {
                             <span className="crit-badge">{critCount}</span>
                           ) : '-'}
                         </td>
-                        <td className="count-cell">{inscriptionCount > 0 ? inscriptionCount : '-'}</td>
                         <td className="date-cell">{formatDate(build.updatedAt)}</td>
                       </tr>
                     );
                   })}
                 </tbody>
               </table>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Governors Tab */}
+      {activeTab === 'governors' && (
+        <>
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search governors..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {loading ? (
+            <div className="loading">
+              <div className="loading-spinner"></div>
+              <span>Loading governors...</span>
+            </div>
+          ) : filteredGovernors.length === 0 ? (
+            <div className="no-results">
+              {searchQuery
+                ? `No governors found matching "${searchQuery}"`
+                : 'No governors yet. Click "Add Governor" to get started!'}
+            </div>
+          ) : (
+            <div className="governors-grid">
+              {filteredGovernors.map((governor) => (
+                <GovernorCard
+                  key={governor._id}
+                  governor={governor}
+                  onClick={() => navigate(`/governor/${governor._id}`)}
+                  onDelete={() => handleDeleteGovernor(governor._id)}
+                />
+              ))}
             </div>
           )}
         </>
