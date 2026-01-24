@@ -68,7 +68,7 @@ function EquipmentSlot({ slot, equipment, value, onChange }) {
         <option value="">-- None --</option>
         {slotEquipment.map((eq) => (
           <option key={eq.equipment_id} value={eq.name}>
-            {eq.name}
+            {eq.name}{eq.baseStat ? ` (${eq.baseStat})` : ''}
           </option>
         ))}
       </select>

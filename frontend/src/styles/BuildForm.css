@@ -322,3 +322,127 @@
   border-radius: 8px;
   margin-bottom: 1rem;
 }
+
+/* Stats Summary Box */
+.stats-summary-box {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 12px;
+  border: 1px solid #e94560;
+}
+
+.stats-summary-box h3 {
+  color: #e94560;
+  font-size: 1.1rem;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(233, 69, 96, 0.3);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  background: rgba(15, 52, 96, 0.5);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.stat-value.attack {
+  color: #ff6b6b;
+}
+
+.stat-value.defense {
+  color: #60a5fa;
+}
+
+.stat-value.health {
+  color: #4ade80;
+}
+
+.stat-value.damage {
+  color: #fbbf24;
+}
+
+/* Set Bonuses */
+.set-bonuses {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(233, 69, 96, 0.3);
+}
+
+.set-bonuses h4 {
+  color: #ffd700;
+  font-size: 0.9rem;
+  margin: 0 0 0.75rem 0;
+}
+
+.set-bonus-item {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.set-bonus-item:last-child {
+  margin-bottom: 0;
+}
+
+.set-name {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.set-effect {
+  color: #94a3b8;
+}
+
+/* Set Counts */
+.set-counts {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(233, 69, 96, 0.3);
+}
+
+.set-counts h4 {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.set-count-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.set-count-badge {
+  padding: 0.35rem 0.75rem;
+  background: rgba(233, 69, 96, 0.2);
+  border-radius: 16px;
+  font-size: 0.8rem;
+  color: #e94560;
+}

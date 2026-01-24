@@ -50,6 +50,26 @@ const equipmentSchema = new mongoose.Schema({
     required: true,
     enum: ['WEAPON', 'HELMET', 'CHEST', 'GLOVES', 'LEGS', 'BOOTS', 'ACCESSORY']
   },
+  troopType: {
+    type: String,
+    enum: ['infantry', 'cavalry', 'archer', 'leadership', 'universal'],
+    default: 'universal'
+  },
+  baseStat: {
+    type: String,
+    default: null
+    // Human-readable stat description, e.g., "+25% Cavalry Attack"
+  },
+  baseStatType: {
+    type: String,
+    enum: ['attack', 'defense', 'health'],
+    default: null
+  },
+  baseStatValue: {
+    type: Number,
+    default: 0
+    // The percentage value of the base stat
+  },
   set_name: {
     type: String,
     default: null

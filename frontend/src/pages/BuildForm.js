@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { governorService, buildService, dataService } from '../services/api';
 import CommanderSelect from '../components/CommanderSelect';
 import EquipmentSlot from '../components/EquipmentSlot';
+import { calculateEquipmentStats, countSetPieces, getActiveSetBonuses, formatStat } from '../utils/statsCalculator';
 import '../styles/BuildForm.css';
 
 const EQUIPMENT_SLOTS = ['weapon', 'helmet', 'chest', 'gloves', 'legs', 'boots', 'accessory1', 'accessory2'];
@@ -194,6 +195,18 @@ function BuildForm() {
 
   const selectedFormation = armaments.find((a) => a.armamentId === formData.armament.formation);
 
+  // Calculate equipment stats
+  const equipmentStats = useMemo(() => {
+    return calculateEquipmentStats(formData.equipment, equipment, troopType);
+  }, [formData.equipment, equipment, troopType]);
+
+  // Calculate set bonuses
+  const { setCounts, activeBonuses } = useMemo(() => {
+    const counts = countSetPieces(formData.equipment, equipment);
+    const bonuses = getActiveSetBonuses(counts);
+    return { setCounts: counts, activeBonuses: bonuses };
+  }, [formData.equipment, equipment]);
+
   return (
     <div className="build-form-page">
       <button className="back-btn" onClick={() => navigate(`/governor/${id}`)}>
@@ -239,6 +252,82 @@ function BuildForm() {
                 onChange={(data) => handleEquipmentChange(slot, data)}
               />
             ))}
+          </div>
+
+          {/* Stats Summary Box */}
+          <div className="stats-summary-box">
+            <h3>Equipment Stats Summary</h3>
+            <div className="stats-grid">
+              <div className="stat-item">
+                <span className="stat-label">Attack</span>
+                <span className="stat-value attack">{formatStat(equipmentStats.attack) || '0%'}</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Defense</span>
+                <span className="stat-value defense">{formatStat(equipmentStats.defense) || '0%'}</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Health</span>
+                <span className="stat-value health">{formatStat(equipmentStats.health) || '0%'}</span>
+              </div>
+              {equipmentStats.all_dmg > 0 && (
+                <div className="stat-item">
+                  <span className="stat-label">All Damage</span>
+                  <span className="stat-value damage">{formatStat(equipmentStats.all_dmg)}</span>
+                </div>
+              )}
+              {equipmentStats.skill_dmg > 0 && (
+                <div className="stat-item">
+                  <span className="stat-label">Skill Damage</span>
+                  <span className="stat-value damage">{formatStat(equipmentStats.skill_dmg, false)}</span>
+                </div>
+              )}
+              {equipmentStats.counterattack > 0 && (
+                <div className="stat-item">
+                  <span className="stat-label">Counterattack</span>
+                  <span className="stat-value damage">{formatStat(equipmentStats.counterattack, false)}</span>
+                </div>
+              )}
+              {equipmentStats.march_speed > 0 && (
+                <div className="stat-item">
+                  <span className="stat-label">March Speed</span>
+                  <span className="stat-value">{formatStat(equipmentStats.march_speed)}</span>
+                </div>
+              )}
+              {equipmentStats.skill_dmg_reduction > 0 && (
+                <div className="stat-item">
+                  <span className="stat-label">Skill Dmg Reduction</span>
+                  <span className="stat-value">{formatStat(equipmentStats.skill_dmg_reduction, false)}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Set Bonuses */}
+            {activeBonuses.length > 0 && (
+              <div className="set-bonuses">
+                <h4>Active Set Bonuses</h4>
+                {activeBonuses.map((bonus, idx) => (
+                  <div key={idx} className="set-bonus-item">
+                    <span className="set-name">{bonus.setName} ({bonus.pieces}pc):</span>
+                    <span className="set-effect">{bonus.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Set Piece Counts */}
+            {Object.keys(setCounts).length > 0 && (
+              <div className="set-counts">
+                <h4>Set Pieces</h4>
+                <div className="set-count-list">
+                  {Object.entries(setCounts).map(([setName, count]) => (
+                    <span key={setName} className="set-count-badge">
+                      {setName}: {count}/6
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
