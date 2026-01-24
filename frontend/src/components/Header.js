@@ -9,8 +9,7 @@ function Header({ onLogout }) {
     <header className="header">
       <div className="header-content">
         <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-          <h1>ROK Data Keeper</h1>
-          <span className="subtitle">Alliance Build Tracker</span>
+          <h1>3584 Rally/Garrison Data Keeper</h1>
         </div>
 
         <button className="logout-btn" onClick={onLogout}>

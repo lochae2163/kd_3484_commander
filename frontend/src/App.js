@@ -40,7 +40,7 @@ function App() {
         </main>
 
         <footer className="footer">
-          <p>ROK Data Keeper - Alliance Build Tracker</p>
+          <p>3584 Rally/Garrison Data Keeper</p>
         </footer>
       </div>
     </Router>

@@ -31,8 +31,8 @@ function Login({ onLogin }) {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>3584 Commanders</h1>
-        <p>Alliance Build Tracker</p>
+        <h1>3584 Rally/Garrison</h1>
+        <p>Data Keeper</p>
 
         <form onSubmit={handleSubmit}>
           <input
