@@ -81,29 +81,6 @@ function Dashboard() {
     });
   };
 
-  const getFormationName = (formation) => {
-    const names = {
-      pincer: 'Pincer',
-      tercio: 'Tercio',
-      delta: 'Delta',
-      hollow_square: 'Hollow Square',
-      arch: 'Arch',
-      wedge: 'Wedge'
-    };
-    return names[formation] || '-';
-  };
-
-  const countArmamentInscriptions = (armament) => {
-    if (!armament) return 0;
-    let count = 0;
-    ['emblem', 'flag', 'instrument', 'scroll'].forEach(slot => {
-      if (armament[slot]?.inscriptions?.length) {
-        count += armament[slot].inscriptions.length;
-      }
-    });
-    return count;
-  };
-
   const countEquipment = (equipment) => {
     if (!equipment) return 0;
     return Object.values(equipment).filter(e => e && e.equipmentId).length;
