@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: rok-commander-backend
+    name: kd3584-commander-backend
     runtime: node
     region: oregon
     plan: free
@@ -13,6 +13,8 @@ services:
       - key: MONGODB_URI
         sync: false
       - key: SITE_PASSWORD
+        sync: false
+      - key: FRONTEND_URL
         sync: false
     autoDeploy: true
     healthCheckPath: /api/health
