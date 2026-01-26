@@ -32,11 +32,12 @@ api.interceptors.response.use(
 
 // Auth service
 export const authService = {
-  login: (login, password) => api.post('/auth/login', { login, password }),
+  login: (visibleGovernorId, password) => api.post('/auth/login', { visibleGovernorId, password }),
   register: (data) => api.post('/auth/register', data),
   getMe: () => api.get('/auth/me'),
   linkGovernor: (governorId) => api.post('/auth/link-governor', { governorId }),
   getUnclaimedGovernors: () => api.get('/auth/unclaimed-governors'),
+  createAdmin: (data) => api.post('/auth/create-admin', data),
   isAuthenticated: () => !!localStorage.getItem('rokToken'),
   logout: () => {
     localStorage.removeItem('rokToken');
@@ -62,6 +63,19 @@ export const buildService = {
   create: (governorId, data) => api.post(`/governors/${governorId}/builds`, data),
   update: (governorId, buildId, data) => api.put(`/governors/${governorId}/builds/${buildId}`, data),
   delete: (governorId, buildId) => api.delete(`/governors/${governorId}/builds/${buildId}`),
+};
+
+// Upload service
+export const uploadService = {
+  uploadScreenshot: (governorId, buildId, file) => {
+    const formData = new FormData();
+    formData.append('screenshot', file);
+    return api.post(`/upload/build/${governorId}/${buildId}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  },
+  deleteScreenshot: (governorId, buildId) =>
+    api.delete(`/upload/build/${governorId}/${buildId}`)
 };
 
 // Data service (reference data)

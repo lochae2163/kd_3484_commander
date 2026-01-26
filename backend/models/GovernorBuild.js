@@ -82,6 +82,14 @@ const governorBuildSchema = new mongoose.Schema({
       instrument: { inscriptions: [] },
       scroll: { inscriptions: [] }
     })
+  },
+  screenshotUrl: {
+    type: String,
+    default: null
+  },
+  screenshotPublicId: {
+    type: String,
+    default: null
   }
 }, { timestamps: true });
 

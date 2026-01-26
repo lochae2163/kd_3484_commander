@@ -5,10 +5,8 @@ import '../styles/Login.css';
 function Login() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [formData, setFormData] = useState({
-    login: '',
+    visibleGovernorId: '',
     password: '',
-    username: '',
-    email: '',
     governorName: ''
   });
   const [error, setError] = useState('');
@@ -34,13 +32,12 @@ function Login() {
     try {
       if (isRegistering) {
         await register({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          governorName: formData.governorName || undefined
+          governorName: formData.governorName,
+          visibleGovernorId: formData.visibleGovernorId,
+          password: formData.password
         });
       } else {
-        await login(formData.login, formData.password);
+        await login(formData.visibleGovernorId, formData.password);
       }
     } catch (err) {
       setError(err.response?.data?.error || err.response?.data?.errors?.[0]?.msg || 'Authentication failed');
@@ -60,24 +57,27 @@ function Login() {
             <>
               <input
                 type="text"
-                name="username"
-                placeholder="Username"
-                value={formData.username}
+                name="governorName"
+                placeholder="Governor Name"
+                value={formData.governorName}
                 onChange={handleChange}
                 disabled={loading}
                 required
-                minLength={3}
-                maxLength={30}
+                minLength={2}
+                maxLength={50}
               />
               <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
+                type="text"
+                name="visibleGovernorId"
+                placeholder="Governor ID (in-game ID)"
+                value={formData.visibleGovernorId}
                 onChange={handleChange}
                 disabled={loading}
                 required
               />
+              <p className="help-text">
+                Your in-game governor ID (visible in profile)
+              </p>
               <input
                 type="password"
                 name="password"
@@ -88,25 +88,14 @@ function Login() {
                 required
                 minLength={6}
               />
-              <input
-                type="text"
-                name="governorName"
-                placeholder="Governor Name (optional)"
-                value={formData.governorName}
-                onChange={handleChange}
-                disabled={loading}
-              />
-              <p className="help-text">
-                Enter your ROK governor name to link your account.
-              </p>
             </>
           ) : (
             <>
               <input
                 type="text"
-                name="login"
-                placeholder="Username or Email"
-                value={formData.login}
+                name="visibleGovernorId"
+                placeholder="Governor ID"
+                value={formData.visibleGovernorId}
                 onChange={handleChange}
                 disabled={loading}
                 required
@@ -138,10 +127,8 @@ function Login() {
               setIsRegistering(!isRegistering);
               setError('');
               setFormData({
-                login: '',
+                visibleGovernorId: '',
                 password: '',
-                username: '',
-                email: '',
                 governorName: ''
               });
             }}

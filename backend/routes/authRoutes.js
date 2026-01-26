@@ -17,55 +17,48 @@ const validate = (req, res, next) => {
 
 /**
  * POST /api/auth/register
- * Register a new user
+ * Register a new user with governor name, governor ID, and password
  */
 router.post('/register', [
-  body('username').trim().isLength({ min: 3, max: 30 }).withMessage('Username must be 3-30 characters'),
-  body('email').isEmail().normalizeEmail().withMessage('Valid email required'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  body('governorName').optional().trim()
+  body('governorName').trim().isLength({ min: 2, max: 50 }).withMessage('Governor name must be 2-50 characters'),
+  body('visibleGovernorId').trim().notEmpty().withMessage('Governor ID is required'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
 ], validate, async (req, res) => {
   try {
-    const { username, email, password, governorName } = req.body;
+    const { governorName, visibleGovernorId, password } = req.body;
 
-    // Check if user already exists
-    const existingUser = await User.findOne({
-      $or: [{ email }, { username: { $regex: `^${username}$`, $options: 'i' } }]
-    });
-
+    // Check if governor ID already registered
+    const existingUser = await User.findOne({ visibleGovernorId });
     if (existingUser) {
-      const field = existingUser.email === email.toLowerCase() ? 'email' : 'username';
-      return res.status(400).json({ error: `User with this ${field} already exists` });
+      return res.status(400).json({ error: 'This Governor ID is already registered' });
     }
 
-    // Create user
-    const user = await User.create({ username, email, password });
+    // Check if governor name already exists
+    const existingGovernor = await Governor.findOne({
+      name: { $regex: `^${governorName}$`, $options: 'i' }
+    });
 
-    // Optionally create/link governor
-    let governor = null;
-    if (governorName) {
-      // Check if governor name already exists
-      const existingGovernor = await Governor.findOne({
-        name: { $regex: `^${governorName}$`, $options: 'i' }
-      });
+    let governor;
+    let user;
 
-      if (existingGovernor) {
-        // If governor exists and is unclaimed, claim it
-        if (!existingGovernor.userId) {
-          existingGovernor.userId = user._id;
-          await existingGovernor.save();
-          user.governorId = existingGovernor._id;
-          await user.save();
-          governor = existingGovernor;
-        } else {
-          return res.status(400).json({ error: 'Governor name already claimed by another user' });
-        }
-      } else {
-        // Create new governor
-        governor = await Governor.create({ name: governorName, userId: user._id });
-        user.governorId = governor._id;
+    if (existingGovernor) {
+      // If governor exists and is unclaimed, claim it
+      if (!existingGovernor.userId) {
+        user = await User.create({ visibleGovernorId, password });
+        existingGovernor.userId = user._id;
+        await existingGovernor.save();
+        user.governorId = existingGovernor._id;
         await user.save();
+        governor = existingGovernor;
+      } else {
+        return res.status(400).json({ error: 'Governor name already claimed by another user' });
       }
+    } else {
+      // Create new user and governor
+      user = await User.create({ visibleGovernorId, password });
+      governor = await Governor.create({ name: governorName, userId: user._id });
+      user.governorId = governor._id;
+      await user.save();
     }
 
     const token = generateToken(user._id);
@@ -75,8 +68,7 @@ router.post('/register', [
       token,
       user: {
         id: user._id,
-        username: user.username,
-        email: user.email,
+        visibleGovernorId: user.visibleGovernorId,
         role: user.role,
         governorId: user.governorId
       },
@@ -90,22 +82,16 @@ router.post('/register', [
 
 /**
  * POST /api/auth/login
- * Login user
+ * Login with governor ID and password
  */
 router.post('/login', [
-  body('login').trim().notEmpty().withMessage('Username or email required'),
+  body('visibleGovernorId').trim().notEmpty().withMessage('Governor ID required'),
   body('password').notEmpty().withMessage('Password required')
 ], validate, async (req, res) => {
   try {
-    const { login, password } = req.body;
+    const { visibleGovernorId, password } = req.body;
 
-    // Find user by email or username
-    const user = await User.findOne({
-      $or: [
-        { email: login.toLowerCase() },
-        { username: { $regex: `^${login}$`, $options: 'i' } }
-      ]
-    });
+    const user = await User.findOne({ visibleGovernorId });
 
     if (!user || !user.isActive) {
       return res.status(401).json({ error: 'Invalid credentials' });
@@ -128,8 +114,7 @@ router.post('/login', [
       token,
       user: {
         id: user._id,
-        username: user.username,
-        email: user.email,
+        visibleGovernorId: user.visibleGovernorId,
         role: user.role,
         governorId: user.governorId
       },
@@ -155,8 +140,7 @@ router.get('/me', authMiddleware, async (req, res) => {
       success: true,
       user: {
         id: req.user._id,
-        username: req.user.username,
-        email: req.user.email,
+        visibleGovernorId: req.user.visibleGovernorId,
         role: req.user.role,
         governorId: req.user.governorId
       },
@@ -230,43 +214,67 @@ router.get('/users', authMiddleware, adminMiddleware, async (req, res) => {
 });
 
 /**
- * Admin: Create user (invite)
+ * POST /api/auth/create-admin
+ * Create admin user (only works if no admin exists)
  */
-router.post('/invite', authMiddleware, adminMiddleware, [
-  body('username').trim().isLength({ min: 3, max: 30 }),
-  body('email').isEmail().normalizeEmail(),
-  body('tempPassword').isLength({ min: 6 })
+router.post('/create-admin', [
+  body('visibleGovernorId').trim().notEmpty().withMessage('Governor ID required'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  body('adminSecret').notEmpty().withMessage('Admin secret required')
 ], validate, async (req, res) => {
   try {
-    const { username, email, tempPassword, governorId } = req.body;
+    const { visibleGovernorId, password, adminSecret, governorName } = req.body;
 
+    // Check admin secret (should match environment variable)
+    const expectedSecret = process.env.ADMIN_SECRET || 'rok3584admin';
+    if (adminSecret !== expectedSecret) {
+      return res.status(403).json({ error: 'Invalid admin secret' });
+    }
+
+    // Check if admin already exists
+    const existingAdmin = await User.findOne({ role: 'admin' });
+    if (existingAdmin) {
+      return res.status(400).json({ error: 'Admin user already exists' });
+    }
+
+    // Check if governor ID already registered
+    const existingUser = await User.findOne({ visibleGovernorId });
+    if (existingUser) {
+      return res.status(400).json({ error: 'This Governor ID is already registered' });
+    }
+
+    // Create admin user
     const user = await User.create({
-      username,
-      email,
-      password: tempPassword
+      visibleGovernorId,
+      password,
+      role: 'admin'
     });
 
-    if (governorId) {
-      const governor = await Governor.findById(governorId);
-      if (governor && !governor.userId) {
-        governor.userId = user._id;
-        await governor.save();
-        user.governorId = governor._id;
-        await user.save();
-      }
+    // Create governor if name provided
+    let governor = null;
+    if (governorName) {
+      governor = await Governor.create({ name: governorName, userId: user._id });
+      user.governorId = governor._id;
+      await user.save();
     }
+
+    const token = generateToken(user._id);
 
     res.status(201).json({
       success: true,
+      token,
       user: {
         id: user._id,
-        username: user.username,
-        email: user.email
+        visibleGovernorId: user.visibleGovernorId,
+        role: user.role,
+        governorId: user.governorId
       },
-      message: `User created. Temporary password: ${tempPassword}`
+      governor,
+      message: 'Admin user created successfully'
     });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create user' });
+    console.error('Admin creation error:', error);
+    res.status(500).json({ error: 'Failed to create admin' });
   }
 });
 

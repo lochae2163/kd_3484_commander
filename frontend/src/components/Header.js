@@ -16,15 +16,15 @@ function Header() {
 
         <div className="header-right">
           <div className="user-info">
-            <span className="username">{user?.username}</span>
             {governor && (
               <span
                 className="governor-name"
                 onClick={() => navigate(`/governor/${governor._id}`)}
               >
-                ({governor.name})
+                {governor.name}
               </span>
             )}
+            <span className="governor-id">ID: {user?.visibleGovernorId}</span>
             {isAdmin && <span className="admin-badge">Admin</span>}
           </div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { governorService, buildService, dataService } from '../services/api';
+import { governorService, buildService, dataService, uploadService } from '../services/api';
 import CommanderSelect from '../components/CommanderSelect';
 import EquipmentSlot from '../components/EquipmentSlot';
 import { calculateEquipmentStats, countSetPieces, getActiveSetBonuses, formatStat } from '../utils/statsCalculator';
@@ -27,6 +27,8 @@ function BuildForm() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [screenshotUrl, setScreenshotUrl] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   const [formData, setFormData] = useState({
     primaryCommander: '',
@@ -93,6 +95,7 @@ function BuildForm() {
           equipment: build.equipment || formData.equipment,
           armament: build.armament || formData.armament,
         });
+        setScreenshotUrl(build.screenshotUrl || null);
       }
     } catch (err) {
       setError('Failed to load data');
@@ -163,6 +166,39 @@ function BuildForm() {
       setError(err.response?.data?.error || 'Failed to save build');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleScreenshotUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file || !buildId) return;
+
+    setUploading(true);
+    setError('');
+
+    try {
+      const response = await uploadService.uploadScreenshot(id, buildId, file);
+      setScreenshotUrl(response.data.screenshotUrl);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to upload screenshot');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleScreenshotDelete = async () => {
+    if (!buildId) return;
+
+    setUploading(true);
+    setError('');
+
+    try {
+      await uploadService.deleteScreenshot(id, buildId);
+      setScreenshotUrl(null);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to delete screenshot');
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -403,6 +439,40 @@ function BuildForm() {
             </div>
           )}
         </section>
+
+        {buildId && (
+          <section className="form-section">
+            <h2>Screenshot</h2>
+            <p className="hint">Upload a screenshot of your commander's equipment from the game</p>
+
+            {screenshotUrl ? (
+              <div className="screenshot-preview">
+                <img src={screenshotUrl} alt="Build screenshot" />
+                <button
+                  type="button"
+                  className="btn-delete-screenshot"
+                  onClick={handleScreenshotDelete}
+                  disabled={uploading}
+                >
+                  {uploading ? 'Deleting...' : 'Delete Screenshot'}
+                </button>
+              </div>
+            ) : (
+              <div className="screenshot-upload">
+                <label className="upload-label">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleScreenshotUpload}
+                    disabled={uploading}
+                  />
+                  {uploading ? 'Uploading...' : 'Choose Image'}
+                </label>
+                <p className="upload-hint">Max 5MB, JPG/PNG/WebP</p>
+              </div>
+            )}
+          </section>
+        )}
 
         <div className="form-actions">
           <button type="button" className="btn-secondary" onClick={() => navigate(`/governor/${id}`)}>

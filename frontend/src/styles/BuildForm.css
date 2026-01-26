@@ -446,3 +446,74 @@
   font-size: 0.8rem;
   color: #e94560;
 }
+
+/* Screenshot Section */
+.screenshot-preview {
+  text-align: center;
+}
+
+.screenshot-preview img {
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 8px;
+  border: 2px solid #1a1a2e;
+  margin-bottom: 1rem;
+}
+
+.btn-delete-screenshot {
+  padding: 0.5rem 1rem;
+  border: 2px solid #ff6b6b;
+  border-radius: 8px;
+  background: transparent;
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-delete-screenshot:hover:not(:disabled) {
+  background: #ff6b6b;
+  color: #fff;
+}
+
+.btn-delete-screenshot:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.screenshot-upload {
+  text-align: center;
+  padding: 2rem;
+  border: 2px dashed #2d4263;
+  border-radius: 12px;
+  transition: border-color 0.2s;
+}
+
+.screenshot-upload:hover {
+  border-color: #e94560;
+}
+
+.upload-label {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #e94560;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.upload-label:hover {
+  background: #d63850;
+}
+
+.upload-label input[type="file"] {
+  display: none;
+}
+
+.upload-hint {
+  color: #64748b;
+  font-size: 0.8rem;
+  margin-top: 0.75rem;
+}
