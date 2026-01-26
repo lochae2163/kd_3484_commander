@@ -269,6 +269,14 @@ router.post('/create-admin', [
       return res.status(400).json({ error: 'This Governor ID is already registered' });
     }
 
+    // Drop old User indexes that might cause issues
+    try {
+      await User.collection.dropIndex('email_1');
+    } catch (e) { /* Index may not exist */ }
+    try {
+      await User.collection.dropIndex('username_1');
+    } catch (e) { /* Index may not exist */ }
+
     // Create admin user
     const user = await User.create({
       visibleGovernorId,
@@ -276,10 +284,23 @@ router.post('/create-admin', [
       role: 'admin'
     });
 
-    // Create governor if name provided
+    // Link or create governor if name provided
     let governor = null;
     if (governorName) {
-      governor = await Governor.create({ name: governorName, userId: user._id });
+      // Check if governor already exists
+      const existingGovernor = await Governor.findOne({
+        name: { $regex: `^${governorName}$`, $options: 'i' }
+      });
+
+      if (existingGovernor) {
+        // Link existing governor to admin
+        existingGovernor.userId = user._id;
+        await existingGovernor.save();
+        governor = existingGovernor;
+      } else {
+        // Create new governor
+        governor = await Governor.create({ name: governorName, userId: user._id });
+      }
       user.governorId = governor._id;
       await user.save();
     }
