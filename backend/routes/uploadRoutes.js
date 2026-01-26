@@ -6,9 +6,11 @@ import Governor from '../models/Governor.js';
 
 const router = express.Router();
 
+const MAX_SCREENSHOTS = 5; // Maximum screenshots per build
+
 /**
  * POST /api/upload/build/:governorId/:buildId
- * Upload screenshot for a build
+ * Upload a screenshot for a build (adds to array)
  */
 router.post('/build/:governorId/:buildId', authMiddleware, upload.single('screenshot'), async (req, res) => {
   try {
@@ -32,19 +34,26 @@ router.post('/build/:governorId/:buildId', authMiddleware, upload.single('screen
       return res.status(404).json({ error: 'Build not found' });
     }
 
-    // If there's an existing image, delete it first
-    if (build.screenshotPublicId) {
-      await deleteImage(build.screenshotPublicId);
+    // Check max screenshots limit
+    if (build.screenshots && build.screenshots.length >= MAX_SCREENSHOTS) {
+      return res.status(400).json({ error: `Maximum ${MAX_SCREENSHOTS} screenshots allowed per build` });
     }
 
-    // Update build with new image
-    build.screenshotUrl = req.file.path;
-    build.screenshotPublicId = req.file.filename;
+    // Initialize screenshots array if needed
+    if (!build.screenshots) {
+      build.screenshots = [];
+    }
+
+    // Add new screenshot
+    build.screenshots.push({
+      url: req.file.path,
+      publicId: req.file.filename
+    });
     await build.save();
 
     res.json({
       success: true,
-      screenshotUrl: build.screenshotUrl,
+      screenshots: build.screenshots,
       message: 'Screenshot uploaded successfully'
     });
   } catch (error) {
@@ -54,12 +63,12 @@ router.post('/build/:governorId/:buildId', authMiddleware, upload.single('screen
 });
 
 /**
- * DELETE /api/upload/build/:governorId/:buildId
- * Delete screenshot from a build
+ * DELETE /api/upload/build/:governorId/:buildId/:publicId
+ * Delete a specific screenshot from a build
  */
-router.delete('/build/:governorId/:buildId', authMiddleware, async (req, res) => {
+router.delete('/build/:governorId/:buildId/:publicId', authMiddleware, async (req, res) => {
   try {
-    const { governorId, buildId } = req.params;
+    const { governorId, buildId, publicId } = req.params;
 
     // Check if user owns this governor
     const governor = await Governor.findById(governorId);
@@ -79,18 +88,22 @@ router.delete('/build/:governorId/:buildId', authMiddleware, async (req, res) =>
       return res.status(404).json({ error: 'Build not found' });
     }
 
-    // Delete from Cloudinary if exists
-    if (build.screenshotPublicId) {
-      await deleteImage(build.screenshotPublicId);
+    // Find the screenshot
+    const screenshotIndex = build.screenshots?.findIndex(s => s.publicId === publicId);
+    if (screenshotIndex === -1 || screenshotIndex === undefined) {
+      return res.status(404).json({ error: 'Screenshot not found' });
     }
 
-    // Clear image fields
-    build.screenshotUrl = null;
-    build.screenshotPublicId = null;
+    // Delete from Cloudinary
+    await deleteImage(publicId);
+
+    // Remove from array
+    build.screenshots.splice(screenshotIndex, 1);
     await build.save();
 
     res.json({
       success: true,
+      screenshots: build.screenshots,
       message: 'Screenshot deleted successfully'
     });
   } catch (error) {

@@ -27,7 +27,7 @@ function BuildForm() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  const [screenshotUrl, setScreenshotUrl] = useState(null);
+  const [screenshots, setScreenshots] = useState([]);
   const [uploading, setUploading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -95,7 +95,7 @@ function BuildForm() {
           equipment: build.equipment || formData.equipment,
           armament: build.armament || formData.armament,
         });
-        setScreenshotUrl(build.screenshotUrl || null);
+        setScreenshots(build.screenshots || []);
       }
     } catch (err) {
       setError('Failed to load data');
@@ -178,7 +178,9 @@ function BuildForm() {
 
     try {
       const response = await uploadService.uploadScreenshot(id, buildId, file);
-      setScreenshotUrl(response.data.screenshotUrl);
+      setScreenshots(response.data.screenshots);
+      // Reset the file input
+      e.target.value = '';
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to upload screenshot');
     } finally {
@@ -186,15 +188,15 @@ function BuildForm() {
     }
   };
 
-  const handleScreenshotDelete = async () => {
-    if (!buildId) return;
+  const handleScreenshotDelete = async (publicId) => {
+    if (!buildId || !publicId) return;
 
     setUploading(true);
     setError('');
 
     try {
-      await uploadService.deleteScreenshot(id, buildId);
-      setScreenshotUrl(null);
+      const response = await uploadService.deleteScreenshot(id, buildId, publicId);
+      setScreenshots(response.data.screenshots);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to delete screenshot');
     } finally {
@@ -442,22 +444,28 @@ function BuildForm() {
 
         {buildId && (
           <section className="form-section">
-            <h2>Screenshot</h2>
-            <p className="hint">Upload a screenshot of your commander's equipment from the game</p>
+            <h2>Screenshots ({screenshots.length}/5)</h2>
+            <p className="hint">Upload screenshots of your commander's equipment from the game</p>
 
-            {screenshotUrl ? (
-              <div className="screenshot-preview">
-                <img src={screenshotUrl} alt="Build screenshot" />
-                <button
-                  type="button"
-                  className="btn-delete-screenshot"
-                  onClick={handleScreenshotDelete}
-                  disabled={uploading}
-                >
-                  {uploading ? 'Deleting...' : 'Delete Screenshot'}
-                </button>
+            {screenshots.length > 0 && (
+              <div className="screenshots-gallery">
+                {screenshots.map((screenshot, index) => (
+                  <div key={screenshot.publicId} className="screenshot-item">
+                    <img src={screenshot.url} alt={`Build screenshot ${index + 1}`} />
+                    <button
+                      type="button"
+                      className="btn-delete-screenshot"
+                      onClick={() => handleScreenshotDelete(screenshot.publicId)}
+                      disabled={uploading}
+                    >
+                      {uploading ? '...' : 'X'}
+                    </button>
+                  </div>
+                ))}
               </div>
-            ) : (
+            )}
+
+            {screenshots.length < 5 && (
               <div className="screenshot-upload">
                 <label className="upload-label">
                   <input
@@ -466,9 +474,9 @@ function BuildForm() {
                     onChange={handleScreenshotUpload}
                     disabled={uploading}
                   />
-                  {uploading ? 'Uploading...' : 'Choose Image'}
+                  {uploading ? 'Uploading...' : 'Add Screenshot'}
                 </label>
-                <p className="upload-hint">Max 5MB, JPG/PNG/WebP</p>
+                <p className="upload-hint">Max 5MB per image, JPG/PNG/WebP</p>
               </div>
             )}
           </section>

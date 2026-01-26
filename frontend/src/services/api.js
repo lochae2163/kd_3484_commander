@@ -74,8 +74,8 @@ export const uploadService = {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
   },
-  deleteScreenshot: (governorId, buildId) =>
-    api.delete(`/upload/build/${governorId}/${buildId}`)
+  deleteScreenshot: (governorId, buildId, publicId) =>
+    api.delete(`/upload/build/${governorId}/${buildId}/${encodeURIComponent(publicId)}`)
 };
 
 // Data service (reference data)

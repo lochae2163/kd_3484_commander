@@ -83,14 +83,10 @@ const governorBuildSchema = new mongoose.Schema({
       scroll: { inscriptions: [] }
     })
   },
-  screenshotUrl: {
-    type: String,
-    default: null
-  },
-  screenshotPublicId: {
-    type: String,
-    default: null
-  }
+  screenshots: [{
+    url: { type: String, required: true },
+    publicId: { type: String, required: true }
+  }]
 }, { timestamps: true });
 
 // Index for faster queries
