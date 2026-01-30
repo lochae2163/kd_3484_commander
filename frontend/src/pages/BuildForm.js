@@ -4,6 +4,7 @@ import { governorService, buildService, dataService, uploadService } from '../se
 import CommanderSelect from '../components/CommanderSelect';
 import EquipmentSlot from '../components/EquipmentSlot';
 import { calculateEquipmentStats, countSetPieces, getActiveSetBonuses, formatStat, calculateArmamentStats, calculateTotalStats } from '../utils/statsCalculator';
+import { INSCRIPTION_STATS, TIER_COLORS } from '../data/inscriptionData';
 import '../styles/BuildForm.css';
 
 const EQUIPMENT_SLOTS = ['weapon', 'helmet', 'chest', 'gloves', 'legs', 'boots', 'accessory1', 'accessory2'];
@@ -443,18 +444,53 @@ function BuildForm() {
 
                       return (
                         <div key={tier} className={`tier-group tier-${tier.toLowerCase()}`}>
-                          <h4 className="tier-label">{tier}-Tier</h4>
+                          <div className="tier-header">
+                            <span className="tier-badge" style={{ backgroundColor: TIER_COLORS[tier] }}>{tier}</span>
+                            <span className="tier-label-text">{tier}-Tier</span>
+                          </div>
                           <div className="inscription-options">
-                            {tierInscriptions.map((insc) => (
-                              <label key={insc.inscriptionId} className="inscription-checkbox">
-                                <input
-                                  type="checkbox"
-                                  checked={formData.armament[slot]?.inscriptions?.includes(insc.inscriptionId)}
-                                  onChange={() => handleInscriptionToggle(slot, insc.inscriptionId)}
-                                />
-                                <span className={`inscription-name tier-${tier.toLowerCase()}`}>{insc.name}</span>
-                              </label>
-                            ))}
+                            {tierInscriptions.map((insc) => {
+                              const isSelected = formData.armament[slot]?.inscriptions?.includes(insc.inscriptionId);
+                              const stats = INSCRIPTION_STATS[insc.name] || {};
+                              const hasStats = Object.keys(stats).length > 0;
+
+                              return (
+                                <button
+                                  key={insc.inscriptionId}
+                                  type="button"
+                                  className={`inscription-btn ${isSelected ? 'selected' : ''}`}
+                                  style={{
+                                    borderColor: isSelected ? TIER_COLORS[tier] : 'transparent',
+                                    backgroundColor: isSelected ? `${TIER_COLORS[tier]}20` : 'rgba(255,255,255,0.05)'
+                                  }}
+                                  onClick={() => handleInscriptionToggle(slot, insc.inscriptionId)}
+                                >
+                                  <span className="inscription-name" style={{ color: TIER_COLORS[tier] }}>
+                                    {insc.name}
+                                  </span>
+                                  {hasStats && (
+                                    <span className="inscription-stats">
+                                      {Object.entries(stats).slice(0, 2).map(([key, val]) => {
+                                        const statName = key === 'attack' ? 'ATK' :
+                                                        key === 'defense' ? 'DEF' :
+                                                        key === 'health' ? 'HP' :
+                                                        key === 'allDamage' ? 'All DMG' :
+                                                        key === 'skillDamage' ? 'Skill' :
+                                                        key === 'na' ? 'NA' :
+                                                        key === 'ca' ? 'CA' :
+                                                        key === 'smiteDamage' ? 'Smite' :
+                                                        key === 'comboDamage' ? 'Combo' : key;
+                                        return (
+                                          <span key={key} className="stat-chip">
+                                            +{val} {statName}
+                                          </span>
+                                        );
+                                      })}
+                                    </span>
+                                  )}
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
                       );
