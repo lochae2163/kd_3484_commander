@@ -4,7 +4,7 @@ import { governorService, buildService, dataService, uploadService } from '../se
 import CommanderSelect from '../components/CommanderSelect';
 import EquipmentSlot from '../components/EquipmentSlot';
 import { calculateEquipmentStats, countSetPieces, getActiveSetBonuses, formatStat, calculateArmamentStats, calculateTotalStats } from '../utils/statsCalculator';
-import { INSCRIPTION_STATS, TIER_COLORS } from '../data/inscriptionData';
+import { TIER_COLORS, INSCRIPTION_DESCRIPTIONS } from '../data/inscriptionData';
 import '../styles/BuildForm.css';
 
 const EQUIPMENT_SLOTS = ['weapon', 'helmet', 'chest', 'gloves', 'legs', 'boots', 'accessory1', 'accessory2'];
@@ -49,6 +49,13 @@ function BuildForm() {
       flag: { inscriptions: [] },
       instrument: { inscriptions: [] },
       scroll: { inscriptions: [] },
+    },
+    manualStats: {
+      attack: 0,
+      defense: 0,
+      health: 0,
+      marchSpeed: 0,
+      allDamage: 0,
     },
   });
 
@@ -144,6 +151,16 @@ function BuildForm() {
     });
   };
 
+  const handleManualStatChange = (stat, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      manualStats: {
+        ...prev.manualStats,
+        [stat]: parseFloat(value) || 0,
+      },
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -229,10 +246,18 @@ function BuildForm() {
     return calculateArmamentStats(formData.armament, allInscriptions);
   }, [formData.armament, allInscriptions]);
 
-  // Calculate combined total stats
+  // Calculate combined total stats (including manual stats)
   const totalStats = useMemo(() => {
-    return calculateTotalStats(equipmentStats, armamentStats);
-  }, [equipmentStats, armamentStats]);
+    const baseStats = calculateTotalStats(equipmentStats, armamentStats);
+    return {
+      ...baseStats,
+      attack: baseStats.attack + (formData.manualStats?.attack || 0),
+      defense: baseStats.defense + (formData.manualStats?.defense || 0),
+      health: baseStats.health + (formData.manualStats?.health || 0),
+      marchSpeed: baseStats.marchSpeed + (formData.manualStats?.marchSpeed || 0),
+      allDamage: baseStats.allDamage + (formData.manualStats?.allDamage || 0),
+    };
+  }, [equipmentStats, armamentStats, formData.manualStats]);
 
   // Calculate set bonuses - must be before any conditional returns
   const { setCounts, activeBonuses } = useMemo(() => {
@@ -451,8 +476,7 @@ function BuildForm() {
                           <div className="inscription-options">
                             {tierInscriptions.map((insc) => {
                               const isSelected = formData.armament[slot]?.inscriptions?.includes(insc.inscriptionId);
-                              const stats = INSCRIPTION_STATS[insc.name] || {};
-                              const hasStats = Object.keys(stats).length > 0;
+                              const description = INSCRIPTION_DESCRIPTIONS[insc.name] || '';
 
                               return (
                                 <button
@@ -464,30 +488,11 @@ function BuildForm() {
                                     backgroundColor: isSelected ? `${TIER_COLORS[tier]}20` : 'rgba(255,255,255,0.05)'
                                   }}
                                   onClick={() => handleInscriptionToggle(slot, insc.inscriptionId)}
+                                  title={description}
                                 >
                                   <span className="inscription-name" style={{ color: TIER_COLORS[tier] }}>
                                     {insc.name}
                                   </span>
-                                  {hasStats && (
-                                    <span className="inscription-stats">
-                                      {Object.entries(stats).slice(0, 2).map(([key, val]) => {
-                                        const statName = key === 'attack' ? 'ATK' :
-                                                        key === 'defense' ? 'DEF' :
-                                                        key === 'health' ? 'HP' :
-                                                        key === 'allDamage' ? 'All DMG' :
-                                                        key === 'skillDamage' ? 'Skill' :
-                                                        key === 'na' ? 'NA' :
-                                                        key === 'ca' ? 'CA' :
-                                                        key === 'smiteDamage' ? 'Smite' :
-                                                        key === 'comboDamage' ? 'Combo' : key;
-                                        return (
-                                          <span key={key} className="stat-chip">
-                                            +{val} {statName}
-                                          </span>
-                                        );
-                                      })}
-                                    </span>
-                                  )}
                                 </button>
                               );
                             })}
@@ -500,6 +505,63 @@ function BuildForm() {
               })}
             </div>
           )}
+        </section>
+
+        <section className="form-section">
+          <h2>Additional Stats</h2>
+          <p className="hint">Add any additional stats from talents, civilization bonuses, VIP, etc.</p>
+          <div className="manual-stats-grid">
+            <div className="manual-stat-input">
+              <label>Attack (%)</label>
+              <input
+                type="number"
+                step="0.1"
+                value={formData.manualStats?.attack || ''}
+                onChange={(e) => handleManualStatChange('attack', e.target.value)}
+                placeholder="0"
+              />
+            </div>
+            <div className="manual-stat-input">
+              <label>Defense (%)</label>
+              <input
+                type="number"
+                step="0.1"
+                value={formData.manualStats?.defense || ''}
+                onChange={(e) => handleManualStatChange('defense', e.target.value)}
+                placeholder="0"
+              />
+            </div>
+            <div className="manual-stat-input">
+              <label>Health (%)</label>
+              <input
+                type="number"
+                step="0.1"
+                value={formData.manualStats?.health || ''}
+                onChange={(e) => handleManualStatChange('health', e.target.value)}
+                placeholder="0"
+              />
+            </div>
+            <div className="manual-stat-input">
+              <label>March Speed (%)</label>
+              <input
+                type="number"
+                step="0.1"
+                value={formData.manualStats?.marchSpeed || ''}
+                onChange={(e) => handleManualStatChange('marchSpeed', e.target.value)}
+                placeholder="0"
+              />
+            </div>
+            <div className="manual-stat-input">
+              <label>All Damage (%)</label>
+              <input
+                type="number"
+                step="0.1"
+                value={formData.manualStats?.allDamage || ''}
+                onChange={(e) => handleManualStatChange('allDamage', e.target.value)}
+                placeholder="0"
+              />
+            </div>
+          </div>
         </section>
 
         {buildId && (

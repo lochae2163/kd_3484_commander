@@ -639,3 +639,54 @@
   font-size: 0.8rem;
   margin-top: 0.75rem;
 }
+
+/* Manual Stats Input Section */
+.manual-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.manual-stat-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.manual-stat-input label {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.manual-stat-input input {
+  padding: 0.75rem;
+  border: 2px solid #1a1a2e;
+  border-radius: 8px;
+  background: #1a1a2e;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.manual-stat-input input:focus {
+  border-color: #e94560;
+}
+
+.manual-stat-input input::placeholder {
+  color: #4a5568;
+}
+
+/* Number input spinner styling */
+.manual-stat-input input[type="number"]::-webkit-inner-spin-button,
+.manual-stat-input input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .manual-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
