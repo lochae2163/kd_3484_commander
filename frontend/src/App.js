@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import GovernorDetail from './pages/GovernorDetail';
 import BuildForm from './pages/BuildForm';
+import EquipmentBrowser from './pages/EquipmentBrowser';
 import Header from './components/Header';
 import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
@@ -33,6 +34,7 @@ function AppContent() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/equipment" element={<EquipmentBrowser />} />
             <Route path="/governor/:id" element={<GovernorDetail />} />
             <Route path="/governor/:id/build/new" element={<BuildForm />} />
             <Route path="/governor/:id/build/:buildId" element={<BuildForm />} />

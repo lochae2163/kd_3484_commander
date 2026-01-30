@@ -69,6 +69,23 @@
   text-transform: uppercase;
 }
 
+.equipment-btn {
+  background: transparent;
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.equipment-btn:hover {
+  background: #ffd700;
+  color: #0f0f1a;
+}
+
 .my-builds-btn {
   background: transparent;
   border: 2px solid #6bcb77;

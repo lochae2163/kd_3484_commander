@@ -28,6 +28,13 @@ function Header() {
             {isAdmin && <span className="admin-badge">Admin</span>}
           </div>
 
+          <button
+            className="equipment-btn"
+            onClick={() => navigate('/equipment')}
+          >
+            Equipment
+          </button>
+
           {governor && (
             <button
               className="my-builds-btn"

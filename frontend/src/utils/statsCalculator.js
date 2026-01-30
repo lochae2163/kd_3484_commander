@@ -1,4 +1,6 @@
-// Set bonus definitions
+import { equipmentData } from '../data/equipmentData';
+
+// Set bonus definitions (based on equipment set names)
 export const SET_BONUSES = {
   'Hellish Wasteland': {
     2: { health: 3, label: '+3% Troop Health' },
@@ -22,18 +24,63 @@ export const SET_BONUSES = {
   }
 };
 
-// Calculate set pieces count from equipment
-export function countSetPieces(equipment, equipmentData) {
-  const setCounts = {};
+// Equipment name to set mapping
+const EQUIPMENT_SET_MAP = {
+  // Hellish Wasteland Set
+  'Lance of the Hellish Wasteland': 'Hellish Wasteland',
+  'War Helm of the Hellish Wasteland': 'Hellish Wasteland',
+  'Heavy Armor of the Hellish Wasteland': 'Hellish Wasteland',
+  'Armband of the Hellish Wasteland': 'Hellish Wasteland',
+  'Tassets of the Hellish Wasteland': 'Hellish Wasteland',
+  'Boots of the Hellish Wasteland': 'Hellish Wasteland',
 
+  // Eternal Empire Set
+  'Shield of the Eternal Empire': 'Eternal Empire',
+  'Gold Helm of the Eternal Empire': 'Eternal Empire',
+  'Plate of the Eternal Empire': 'Eternal Empire',
+  'Vambraces of the Eternal Empire': 'Eternal Empire',
+  'Greaves of the Eternal Empire': 'Eternal Empire',
+  'Sturdy Boots of the Eternal Empire': 'Eternal Empire',
+
+  // Dragon's Breath Set
+  "Dragon's Breath Bow": "Dragon's Breath",
+  "Dragon's Breath Helm": "Dragon's Breath",
+  "Dragon's Breath Plate": "Dragon's Breath",
+  "Dragon's Breath Vambraces": "Dragon's Breath",
+  "Dragon's Breath Tassets": "Dragon's Breath",
+  "Dragon's Breath Boots": "Dragon's Breath",
+
+  // Glorious Goddess Set
+  'Scepter of the Glorious Goddess': 'Garb of the Glorious Goddess',
+  'Diadem of the Glorious Goddess': 'Garb of the Glorious Goddess',
+  'Plate of the Glorious Goddess': 'Garb of the Glorious Goddess',
+  'Gauntlets of the Glorious Goddess': 'Garb of the Glorious Goddess',
+  'Chausses of the Glorious Goddess': 'Garb of the Glorious Goddess',
+  'Greaves of the Glorious Goddess': 'Garb of the Glorious Goddess',
+};
+
+// Get equipment data by ID
+function getEquipmentById(id) {
+  return equipmentData.find(eq => eq.id === id);
+}
+
+// Calculate set pieces count from equipment
+export function countSetPieces(equipment) {
+  const setCounts = {};
   const slots = ['weapon', 'helmet', 'chest', 'gloves', 'legs', 'boots', 'accessory1', 'accessory2'];
 
   slots.forEach(slot => {
     const slotData = equipment[slot];
-    if (slotData?.name) {
-      const equipItem = equipmentData.find(e => e.name === slotData.name);
-      if (equipItem?.set_name) {
-        setCounts[equipItem.set_name] = (setCounts[equipItem.set_name] || 0) + 1;
+    if (slotData?.id || slotData?.name) {
+      const equipItem = slotData.id
+        ? getEquipmentById(slotData.id)
+        : equipmentData.find(eq => eq.name === slotData.name);
+
+      if (equipItem) {
+        const setName = EQUIPMENT_SET_MAP[equipItem.name];
+        if (setName) {
+          setCounts[setName] = (setCounts[setName] || 0) + 1;
+        }
       }
     }
   });
@@ -64,15 +111,15 @@ export function getActiveSetBonuses(setCounts) {
 }
 
 // Calculate total stats from equipment
-export function calculateEquipmentStats(equipment, equipmentData, troopType) {
+export function calculateEquipmentStats(equipment, troopType) {
   const stats = {
     attack: 0,
     defense: 0,
     health: 0,
+    marchSpeed: 0,
     all_dmg: 0,
     skill_dmg: 0,
     counterattack: 0,
-    march_speed: 0,
     skill_dmg_reduction: 0
   };
 
@@ -80,48 +127,106 @@ export function calculateEquipmentStats(equipment, equipmentData, troopType) {
 
   slots.forEach(slot => {
     const slotData = equipment[slot];
-    if (slotData?.name) {
-      const equipItem = equipmentData.find(e => e.name === slotData.name);
-      if (equipItem) {
+    if (slotData?.id || slotData?.name) {
+      const equipItem = slotData.id
+        ? getEquipmentById(slotData.id)
+        : equipmentData.find(eq => eq.name === slotData.name);
+
+      if (equipItem && equipItem.stats) {
         const iconicLevel = slotData.iconicLevel || 1;
-        const iconicData = equipItem.iconic_levels?.find(l => l.level === `Iconic ${toRoman(iconicLevel)}`);
+        const hasSpecialTalent = slotData.hasSpecialTalent || slotData.hasCrit || false;
 
-        if (iconicData?.stats) {
-          let attackBonus = iconicData.stats.attack || 0;
-          let defenseBonus = iconicData.stats.defense || 0;
-          let healthBonus = iconicData.stats.health || 0;
+        // Iconic level multiplier (each level adds ~15% more stats)
+        const iconicMultiplier = 1 + (iconicLevel - 1) * 0.15;
 
-          // Apply crit bonus (30% extra)
-          if (slotData.hasCrit) {
-            attackBonus *= 1.3;
-            defenseBonus *= 1.3;
-            healthBonus *= 1.3;
-          }
+        // Special talent bonus (30% more)
+        const talentMultiplier = hasSpecialTalent ? 1.3 : 1;
 
-          stats.attack += attackBonus;
-          stats.defense += defenseBonus;
-          stats.health += healthBonus;
+        const totalMultiplier = iconicMultiplier * talentMultiplier;
+
+        // Get stats based on troop type
+        const eqStats = equipItem.stats;
+
+        // Attack stats
+        let attackBonus = 0;
+        if (troopType === 'infantry') {
+          attackBonus = (eqStats.infantryAttack || 0) + (eqStats.troopAttack || 0);
+        } else if (troopType === 'cavalry') {
+          attackBonus = (eqStats.cavalryAttack || 0) + (eqStats.troopAttack || 0);
+        } else if (troopType === 'archer') {
+          attackBonus = (eqStats.archerAttack || 0) + (eqStats.troopAttack || 0);
+        } else {
+          // For siege or generic, take the highest
+          attackBonus = Math.max(
+            eqStats.infantryAttack || 0,
+            eqStats.cavalryAttack || 0,
+            eqStats.archerAttack || 0,
+            eqStats.siegeAttack || 0
+          ) + (eqStats.troopAttack || 0);
         }
 
-        if (iconicData?.multipliers) {
-          let allDmgBonus = iconicData.multipliers.all_dmg || 0;
-          let skillDmgBonus = iconicData.multipliers.skill_dmg || 0;
-
-          // Apply crit bonus (30% extra)
-          if (slotData.hasCrit) {
-            allDmgBonus *= 1.3;
-            skillDmgBonus *= 1.3;
-          }
-
-          stats.all_dmg += allDmgBonus;
-          stats.skill_dmg += skillDmgBonus;
+        // Defense stats
+        let defenseBonus = 0;
+        if (troopType === 'infantry') {
+          defenseBonus = (eqStats.infantryDefense || 0) + (eqStats.troopDefense || 0);
+        } else if (troopType === 'cavalry') {
+          defenseBonus = (eqStats.cavalryDefense || 0) + (eqStats.troopDefense || 0);
+        } else if (troopType === 'archer') {
+          defenseBonus = (eqStats.archerDefense || 0) + (eqStats.troopDefense || 0);
+        } else {
+          defenseBonus = Math.max(
+            eqStats.infantryDefense || 0,
+            eqStats.cavalryDefense || 0,
+            eqStats.archerDefense || 0,
+            eqStats.siegeDefense || 0
+          ) + (eqStats.troopDefense || 0);
         }
+
+        // Health stats
+        let healthBonus = 0;
+        if (troopType === 'infantry') {
+          healthBonus = (eqStats.infantryHealth || 0) + (eqStats.troopHealth || 0);
+        } else if (troopType === 'cavalry') {
+          healthBonus = (eqStats.cavalryHealth || 0) + (eqStats.troopHealth || 0);
+        } else if (troopType === 'archer') {
+          healthBonus = (eqStats.archerHealth || 0) + (eqStats.troopHealth || 0);
+        } else {
+          healthBonus = Math.max(
+            eqStats.infantryHealth || 0,
+            eqStats.cavalryHealth || 0,
+            eqStats.archerHealth || 0,
+            eqStats.siegeHealth || 0
+          ) + (eqStats.troopHealth || 0);
+        }
+
+        // March speed stats
+        let marchSpeedBonus = 0;
+        if (troopType === 'infantry') {
+          marchSpeedBonus = (eqStats.infantryMarchSpeed || 0) + (eqStats.troopMarchSpeed || 0);
+        } else if (troopType === 'cavalry') {
+          marchSpeedBonus = (eqStats.cavalryMarchSpeed || 0) + (eqStats.troopMarchSpeed || 0);
+        } else if (troopType === 'archer') {
+          marchSpeedBonus = (eqStats.archerMarchSpeed || 0) + (eqStats.troopMarchSpeed || 0);
+        } else {
+          marchSpeedBonus = Math.max(
+            eqStats.infantryMarchSpeed || 0,
+            eqStats.cavalryMarchSpeed || 0,
+            eqStats.archerMarchSpeed || 0,
+            eqStats.siegeMarchSpeed || 0
+          ) + (eqStats.troopMarchSpeed || 0);
+        }
+
+        // Apply multipliers
+        stats.attack += attackBonus * totalMultiplier;
+        stats.defense += defenseBonus * totalMultiplier;
+        stats.health += healthBonus * totalMultiplier;
+        stats.marchSpeed += marchSpeedBonus * totalMultiplier;
       }
     }
   });
 
   // Apply set bonuses
-  const setCounts = countSetPieces(equipment, equipmentData);
+  const setCounts = countSetPieces(equipment);
   const activeBonuses = getActiveSetBonuses(setCounts);
 
   activeBonuses.forEach(bonus => {
@@ -130,7 +235,7 @@ export function calculateEquipmentStats(equipment, equipmentData, troopType) {
     if (bonus.health) stats.health += bonus.health;
     if (bonus.skill_dmg) stats.skill_dmg += bonus.skill_dmg;
     if (bonus.counterattack) stats.counterattack += bonus.counterattack;
-    if (bonus.march_speed) stats.march_speed += bonus.march_speed;
+    if (bonus.march_speed) stats.marchSpeed += bonus.march_speed;
     if (bonus.skill_dmg_reduction) stats.skill_dmg_reduction += bonus.skill_dmg_reduction;
 
     // Troop-specific bonuses
@@ -148,15 +253,35 @@ export function calculateEquipmentStats(equipment, equipmentData, troopType) {
   return stats;
 }
 
-// Convert number to Roman numeral
-function toRoman(num) {
-  const romanNumerals = ['I', 'II', 'III', 'IV', 'V'];
-  return romanNumerals[num - 1] || 'I';
-}
-
 // Format stat value for display
 export function formatStat(value, isPercentage = true) {
-  if (value === 0) return null;
+  if (value === 0 || !value) return null;
   const formatted = value.toFixed(1).replace(/\.0$/, '');
   return isPercentage ? `${formatted}%` : formatted;
+}
+
+// Calculate total materials needed for selected equipment
+export function calculateTotalMaterials(equipment) {
+  const totals = { leather: 0, iron: 0, ebony: 0, bone: 0, gold: 0 };
+  const slots = ['weapon', 'helmet', 'chest', 'gloves', 'legs', 'boots', 'accessory1', 'accessory2'];
+
+  slots.forEach(slot => {
+    const slotData = equipment[slot];
+    if (slotData?.id) {
+      const equipItem = getEquipmentById(slotData.id);
+      if (equipItem) {
+        if (equipItem.materials) {
+          totals.leather += equipItem.materials.leather || 0;
+          totals.iron += equipItem.materials.iron || 0;
+          totals.ebony += equipItem.materials.ebony || 0;
+          totals.bone += equipItem.materials.bone || 0;
+        }
+        if (equipItem.goldCost) {
+          totals.gold += equipItem.goldCost;
+        }
+      }
+    }
+  });
+
+  return totals;
 }

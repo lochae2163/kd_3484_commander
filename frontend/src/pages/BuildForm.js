@@ -21,7 +21,6 @@ function BuildForm() {
   const [governor, setGovernor] = useState(null);
   const [commanders, setCommanders] = useState([]);  // Filtered by troopType for primary
   const [allCommanders, setAllCommanders] = useState([]);  // All commanders for secondary
-  const [equipment, setEquipment] = useState([]);
   const [armaments, setArmaments] = useState([]);
   const [allInscriptions, setAllInscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,14 +33,14 @@ function BuildForm() {
     primaryCommander: '',
     secondaryCommander: '',
     equipment: {
-      weapon: { equipmentId: null, name: null, iconicLevel: null, hasCrit: false },
-      helmet: { equipmentId: null, name: null, iconicLevel: null, hasCrit: false },
-      chest: { equipmentId: null, name: null, iconicLevel: null, hasCrit: false },
-      gloves: { equipmentId: null, name: null, iconicLevel: null, hasCrit: false },
-      legs: { equipmentId: null, name: null, iconicLevel: null, hasCrit: false },
-      boots: { equipmentId: null, name: null, iconicLevel: null, hasCrit: false },
-      accessory1: { equipmentId: null, name: null, iconicLevel: null, hasCrit: false },
-      accessory2: { equipmentId: null, name: null, iconicLevel: null, hasCrit: false },
+      weapon: { id: null, name: null, iconicLevel: 1, hasSpecialTalent: false },
+      helmet: { id: null, name: null, iconicLevel: 1, hasSpecialTalent: false },
+      chest: { id: null, name: null, iconicLevel: 1, hasSpecialTalent: false },
+      gloves: { id: null, name: null, iconicLevel: 1, hasSpecialTalent: false },
+      legs: { id: null, name: null, iconicLevel: 1, hasSpecialTalent: false },
+      boots: { id: null, name: null, iconicLevel: 1, hasSpecialTalent: false },
+      accessory1: { id: null, name: null, iconicLevel: 1, hasSpecialTalent: false },
+      accessory2: { id: null, name: null, iconicLevel: 1, hasSpecialTalent: false },
     },
     armament: {
       formation: null,
@@ -69,11 +68,10 @@ function BuildForm() {
     try {
       setLoading(true);
 
-      const [govRes, commandersRes, allCommandersRes, equipmentRes, inscriptionsRes, armamentsRes] = await Promise.all([
+      const [govRes, commandersRes, allCommandersRes, inscriptionsRes, armamentsRes] = await Promise.all([
         governorService.getById(id),
         dataService.getCommanders(troopType),  // Filtered by troopType for primary
         dataService.getCommanders(),  // All commanders for secondary
-        dataService.getEquipment(),
         dataService.getInscriptions(),
         dataService.getArmaments(),
       ]);
@@ -81,7 +79,6 @@ function BuildForm() {
       setGovernor(govRes.data.governor);
       setCommanders(commandersRes.data.commanders || []);
       setAllCommanders(allCommandersRes.data.commanders || []);
-      setEquipment(equipmentRes.data.equipment || []);
       setAllInscriptions(inscriptionsRes.data.inscriptions || []);
       setArmaments(armamentsRes.data.armaments || []);
 
@@ -223,15 +220,15 @@ function BuildForm() {
 
   // Calculate equipment stats - must be before any conditional returns
   const equipmentStats = useMemo(() => {
-    return calculateEquipmentStats(formData.equipment, equipment, troopType);
-  }, [formData.equipment, equipment, troopType]);
+    return calculateEquipmentStats(formData.equipment, troopType);
+  }, [formData.equipment, troopType]);
 
   // Calculate set bonuses - must be before any conditional returns
   const { setCounts, activeBonuses } = useMemo(() => {
-    const counts = countSetPieces(formData.equipment, equipment);
+    const counts = countSetPieces(formData.equipment);
     const bonuses = getActiveSetBonuses(counts);
     return { setCounts: counts, activeBonuses: bonuses };
-  }, [formData.equipment, equipment]);
+  }, [formData.equipment]);
 
   if (loading) {
     return <div className="loading">Loading...</div>;
@@ -285,7 +282,6 @@ function BuildForm() {
               <EquipmentSlot
                 key={slot}
                 slot={slot}
-                equipment={equipment}
                 value={formData.equipment[slot]}
                 onChange={(data) => handleEquipmentChange(slot, data)}
               />
@@ -326,10 +322,10 @@ function BuildForm() {
                   <span className="stat-value damage">{formatStat(equipmentStats.counterattack, false)}</span>
                 </div>
               )}
-              {equipmentStats.march_speed > 0 && (
+              {equipmentStats.marchSpeed > 0 && (
                 <div className="stat-item">
                   <span className="stat-label">March Speed</span>
-                  <span className="stat-value">{formatStat(equipmentStats.march_speed)}</span>
+                  <span className="stat-value">{formatStat(equipmentStats.marchSpeed)}</span>
                 </div>
               )}
               {equipmentStats.skill_dmg_reduction > 0 && (
