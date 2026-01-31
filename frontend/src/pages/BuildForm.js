@@ -465,12 +465,12 @@ function BuildForm() {
               </div>
             )}
 
-            {/* Manual Stats (from talents, VIP, etc.) */}
+            {/* Manual Stats (from armaments) */}
             {(formData.manualStats?.attack > 0 || formData.manualStats?.defense > 0 ||
               formData.manualStats?.health > 0 || formData.manualStats?.marchSpeed > 0 ||
               formData.manualStats?.allDamage > 0) && (
               <div className="manual-stats-section">
-                <h4>Additional Stats (Talents, VIP, etc.)</h4>
+                <h4>Additional Stats (Armaments)</h4>
                 <div className="manual-stats-display">
                   {formData.manualStats?.attack > 0 && <span className="manual-stat">Attack +{formData.manualStats.attack}%</span>}
                   {formData.manualStats?.defense > 0 && <span className="manual-stat">Defense +{formData.manualStats.defense}%</span>}
@@ -615,7 +615,7 @@ function BuildForm() {
 
         <section className="form-section">
           <h2>Additional Stats</h2>
-          <p className="hint">Add any additional stats from talents, civilization bonuses, VIP, etc.</p>
+          <p className="hint">Add any additional stats from armaments.</p>
           <div className="manual-stats-grid">
             <div className="manual-stat-input">
               <label>Attack (%)</label>
