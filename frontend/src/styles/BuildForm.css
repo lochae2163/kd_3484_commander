@@ -156,6 +156,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   min-width: 100px;
+  position: relative;
 }
 
 .inscription-btn:hover {
@@ -170,6 +171,48 @@
 .inscription-btn .inscription-name {
   font-weight: 600;
   font-size: 0.85rem;
+}
+
+/* Custom tooltip for inscription descriptions */
+.inscription-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a2e;
+  color: #e2e8f0;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: normal;
+  line-height: 1.4;
+  white-space: normal;
+  width: 250px;
+  max-width: 300px;
+  text-align: left;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border: 1px solid #e94560;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  pointer-events: none;
+  margin-bottom: 8px;
+}
+
+.inscription-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #e94560;
+}
+
+.inscription-btn:hover .inscription-tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 
 .inscription-btn .inscription-stats {

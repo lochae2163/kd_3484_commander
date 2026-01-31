@@ -99,6 +99,13 @@ function BuildForm() {
           secondaryCommander: build.secondaryCommander || '',
           equipment: build.equipment || formData.equipment,
           armament: build.armament || formData.armament,
+          manualStats: build.manualStats || {
+            attack: 0,
+            defense: 0,
+            health: 0,
+            marchSpeed: 0,
+            allDamage: 0,
+          },
         });
         setScreenshots(build.screenshots || []);
       }
@@ -488,11 +495,14 @@ function BuildForm() {
                                     backgroundColor: isSelected ? `${TIER_COLORS[tier]}20` : 'rgba(255,255,255,0.05)'
                                   }}
                                   onClick={() => handleInscriptionToggle(slot, insc.inscriptionId)}
-                                  title={description}
+                                  data-tooltip={description}
                                 >
                                   <span className="inscription-name" style={{ color: TIER_COLORS[tier] }}>
                                     {insc.name}
                                   </span>
+                                  {description && (
+                                    <span className="inscription-tooltip">{description}</span>
+                                  )}
                                 </button>
                               );
                             })}

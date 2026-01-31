@@ -83,6 +83,13 @@ const governorBuildSchema = new mongoose.Schema({
       scroll: { inscriptions: [] }
     })
   },
+  manualStats: {
+    attack: { type: Number, default: 0 },
+    defense: { type: Number, default: 0 },
+    health: { type: Number, default: 0 },
+    marchSpeed: { type: Number, default: 0 },
+    allDamage: { type: Number, default: 0 }
+  },
   screenshots: [{
     url: { type: String, required: true },
     publicId: { type: String, required: true }
