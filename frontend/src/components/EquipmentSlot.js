@@ -129,6 +129,33 @@ function EquipmentSlot({ slot, value, onChange }) {
     return '#94a3b8';
   };
 
+  // Format stat key to readable label
+  const formatStatLabel = (key) => {
+    const labels = {
+      infantryAttack: 'Infantry Attack',
+      infantryDefense: 'Infantry Defense',
+      infantryHealth: 'Infantry Health',
+      cavalryAttack: 'Cavalry Attack',
+      cavalryDefense: 'Cavalry Defense',
+      cavalryHealth: 'Cavalry Health',
+      archerAttack: 'Archer Attack',
+      archerDefense: 'Archer Defense',
+      archerHealth: 'Archer Health',
+      allTroopAttack: 'All Troop Attack',
+      allTroopDefense: 'All Troop Defense',
+      allTroopHealth: 'All Troop Health',
+      marchSpeed: 'March Speed',
+      marchSpeedBonus: 'March Speed',
+      rallyAttack: 'Rally Attack',
+      rallyDefense: 'Rally Defense',
+      rallyHealth: 'Rally Health',
+      garrisonAttack: 'Garrison Attack',
+      garrisonDefense: 'Garrison Defense',
+      garrisonHealth: 'Garrison Health',
+    };
+    return labels[key] || key.replace(/([A-Z])/g, ' $1').trim();
+  };
+
   return (
     <div className="equipment-slot-new">
       <label className="slot-label">{SLOT_LABELS[slot]}</label>
@@ -200,12 +227,13 @@ function EquipmentSlot({ slot, value, onChange }) {
         </div>
       )}
 
-      {/* Stats Preview */}
+      {/* Stats Preview - Show ALL stats with labels */}
       {currentStats && Object.keys(currentStats).length > 0 && (
-        <div className="slot-stats-preview">
-          {Object.entries(currentStats).slice(0, 4).map(([key, val]) => (
-            <div key={key} className="stat-mini">
-              <span style={{ color: getStatColor(key) }}>+{val}%</span>
+        <div className="slot-stats-preview full-stats">
+          {Object.entries(currentStats).map(([key, val]) => (
+            <div key={key} className="stat-line">
+              <span className="stat-name">{formatStatLabel(key)}</span>
+              <span className="stat-value" style={{ color: getStatColor(key) }}>+{val}%</span>
             </div>
           ))}
         </div>

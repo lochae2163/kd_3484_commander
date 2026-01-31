@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const equipmentSlotSchema = new mongoose.Schema({
-  equipmentId: {
+  id: {
     type: String,
     default: null
   },
@@ -13,9 +13,9 @@ const equipmentSlotSchema = new mongoose.Schema({
     type: Number,
     min: 1,
     max: 5,
-    default: null
+    default: 1
   },
-  hasCrit: {
+  hasSpecialTalent: {
     type: Boolean,
     default: false
   }

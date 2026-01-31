@@ -83,7 +83,8 @@ function Dashboard() {
 
   const countEquipment = (equipment) => {
     if (!equipment) return 0;
-    return Object.values(equipment).filter(e => e && e.equipmentId).length;
+    // Check for both 'id' (new) and 'equipmentId' (old) for backwards compatibility
+    return Object.values(equipment).filter(e => e && (e.id || e.equipmentId)).length;
   };
 
   const countIconicEquipment = (equipment) => {
@@ -93,7 +94,8 @@ function Dashboard() {
 
   const countCritEquipment = (equipment) => {
     if (!equipment) return 0;
-    return Object.values(equipment).filter(e => e && e.hasCrit).length;
+    // Check for both 'hasSpecialTalent' (new) and 'hasCrit' (old) for backwards compatibility
+    return Object.values(equipment).filter(e => e && (e.hasSpecialTalent || e.hasCrit)).length;
   };
 
   const getAverageIconicLevel = (equipment) => {

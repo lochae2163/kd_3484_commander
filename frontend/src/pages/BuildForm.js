@@ -8,7 +8,7 @@ import { TIER_COLORS, INSCRIPTION_DESCRIPTIONS } from '../data/inscriptionData';
 import '../styles/BuildForm.css';
 
 const EQUIPMENT_SLOTS = ['weapon', 'helmet', 'chest', 'gloves', 'legs', 'boots', 'accessory1', 'accessory2'];
-const ARMAMENT_SLOTS = ['emblem', 'flag', 'instrument', 'scroll'];
+const ARMAMENT_SLOTS = ['scroll', 'instrument', 'emblem', 'flag'];
 const TIER_ORDER = ['S', 'A', 'B', 'C'];
 
 function BuildForm() {

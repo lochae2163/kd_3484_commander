@@ -191,6 +191,38 @@
   justify-content: center;
 }
 
+.slot-stats-preview.full-stats {
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.stat-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-line:last-child {
+  border-bottom: none;
+}
+
+.stat-line .stat-name {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.stat-line .stat-value {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
 .stat-mini {
   font-size: 0.7rem;
   font-weight: 600;
