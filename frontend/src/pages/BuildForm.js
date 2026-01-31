@@ -328,7 +328,7 @@ function BuildForm() {
               {(allTroopStats.infantry.attack > 0 || allTroopStats.infantry.defense > 0 || allTroopStats.infantry.health > 0) && (
                 <div className="troop-type-section infantry">
                   <div className="troop-type-header">
-                    <img src="/images/icons/infantry.svg" alt="Infantry" className="troop-icon" />
+                    <img src="/images/icons/infantry_icon_mini.JXWKh6Db.webp" alt="Infantry" className="troop-icon" />
                     <span>Infantry</span>
                   </div>
                   <div className="troop-stats-list">
@@ -358,7 +358,7 @@ function BuildForm() {
               {(allTroopStats.cavalry.attack > 0 || allTroopStats.cavalry.defense > 0 || allTroopStats.cavalry.health > 0) && (
                 <div className="troop-type-section cavalry">
                   <div className="troop-type-header">
-                    <img src="/images/icons/cavalry.svg" alt="Cavalry" className="troop-icon" />
+                    <img src="/images/icons/cavalry_icon_mini.BtZYDjQ0.webp" alt="Cavalry" className="troop-icon" />
                     <span>Cavalry</span>
                   </div>
                   <div className="troop-stats-list">
@@ -388,7 +388,7 @@ function BuildForm() {
               {(allTroopStats.archer.attack > 0 || allTroopStats.archer.defense > 0 || allTroopStats.archer.health > 0) && (
                 <div className="troop-type-section archer">
                   <div className="troop-type-header">
-                    <img src="/images/icons/archer.svg" alt="Archer" className="troop-icon" />
+                    <img src="/images/icons/archer_icon_mini.CANXUynE.webp" alt="Archer" className="troop-icon" />
                     <span>Archer</span>
                   </div>
                   <div className="troop-stats-list">
@@ -418,7 +418,7 @@ function BuildForm() {
               {(allTroopStats.siege.attack > 0 || allTroopStats.siege.defense > 0 || allTroopStats.siege.health > 0) && (
                 <div className="troop-type-section siege">
                   <div className="troop-type-header">
-                    <img src="/images/icons/siege.svg" alt="Siege" className="troop-icon" />
+                    <img src="/images/icons/siege_icon_mini.ylMmNxB2.webp" alt="Siege" className="troop-icon" />
                     <span>Siege</span>
                   </div>
                   <div className="troop-stats-list">
